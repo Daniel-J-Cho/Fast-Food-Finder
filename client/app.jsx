@@ -8,10 +8,6 @@ import { parseRoute } from './lib';
 import { Wrapper } from '@googlemaps/react-wrapper';
 import Map from './components/map';
 
-const render = Status => {
-  return <h1>{Status}</h1>;
-};
-
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -27,6 +23,10 @@ export default class App extends React.Component {
   }
 
   render() {
+    const render = Status => {
+      return <h1>{Status}</h1>;
+    };
+
     return (
     <div className="container">
       <div className="row">
@@ -46,13 +46,10 @@ export default class App extends React.Component {
           <LocationMarker />
         </div>
       </div>
-      <div className="row">
-        <div id="map" className="mapApp">
-          <h1 className="text-center">Google Maps Demo</h1>
-            <Wrapper apiKey={process.env.AIzaSyDMfLo7laptKHx8P66dENTNznUzvAj7570} render={render}>
-              <Map />
-            </Wrapper>
-        </div>
+      <div className="row mt-lg-5">
+        <Wrapper apiKey={process.env.GOOGLE_MAPS_API_KEY} render={render}>
+          <Map />
+        </Wrapper>
       </div>
     </div>
     );
