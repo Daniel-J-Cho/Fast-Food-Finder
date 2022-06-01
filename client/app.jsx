@@ -5,6 +5,12 @@ import FavoritesButton from './pages/favorites-button';
 import DropdownMenu from './pages/dropdown';
 import LocationMarker from './pages/location-marker';
 import { parseRoute } from './lib';
+import { Wrapper } from '@googlemaps/react-wrapper';
+import Map from './components/map';
+
+const render = Status => {
+  return <h1>{Status}</h1>;
+};
 
 export default class App extends React.Component {
   constructor(props) {
@@ -41,7 +47,12 @@ export default class App extends React.Component {
         </div>
       </div>
       <div className="row">
-        <div id="map"></div>
+        <div id="map" className="mapApp">
+          <h1 className="text-center">Google Maps Demo</h1>
+            <Wrapper apiKey={process.env.AIzaSyDMfLo7laptKHx8P66dENTNznUzvAj7570} render={render}>
+              <Map />
+            </Wrapper>
+        </div>
       </div>
     </div>
     );
