@@ -13,7 +13,7 @@ const Map = () => {
     }
   }, [ref, map]);
 
-  return <div ref={ref} style={{ height: '68vh', width: '80vw', margin: 'auto' }}/>;
+  return <div ref={ref} style={{ height: '68vh', width: '81vw', margin: 'auto' }}/>;
 };
 
 export default Map;

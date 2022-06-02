@@ -1,9 +1,9 @@
 import React from 'react';
 import MainHeader from './pages/main-header';
-import HomeButton from './pages/home-button';
-import FavoritesButton from './pages/favorites-button';
-import DropdownMenu from './pages/dropdown';
-import LocationMarker from './pages/location-marker';
+import HomeButton from './components/home-button';
+import FavoritesButton from './components/favorites-button';
+import DropdownMenu from './components/dropdown';
+import LocationMarker from './components/location-marker';
 import { parseRoute } from './lib';
 import { Wrapper } from '@googlemaps/react-wrapper';
 import Map from './components/map';

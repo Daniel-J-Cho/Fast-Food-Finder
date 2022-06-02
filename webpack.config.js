@@ -50,6 +50,9 @@ module.exports = {
   stats: 'minimal',
   devtool: isDevelopment ? 'cheap-module-source-map' : 'source-map',
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env': JSON.stringify(process.env)
+    }),
     new webpack.EnvironmentPlugin([]),
     isDevelopment && new ReactRefreshWebpackPlugin(),
     isDevelopment && new webpack.NoEmitOnErrorsPlugin(),
