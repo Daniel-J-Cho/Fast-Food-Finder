@@ -1,10 +1,12 @@
 import React from 'react';
 import MainHeader from './pages/main-header';
-import HomeButton from './pages/home-button';
-import FavoritesButton from './pages/favorites-button';
-import DropdownMenu from './pages/dropdown';
-import LocationMarker from './pages/location-marker';
+import HomeButton from './components/home-button';
+import FavoritesButton from './components/favorites-button';
+import DropdownMenu from './components/dropdown';
+import LocationMarker from './components/location-marker';
 import { parseRoute } from './lib';
+import { Wrapper } from '@googlemaps/react-wrapper';
+import Map from './components/map';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -21,6 +23,10 @@ export default class App extends React.Component {
   }
 
   render() {
+    const render = Status => {
+      return <h1>{Status}</h1>;
+    };
+
     return (
     <div className="container">
       <div className="row">
@@ -40,8 +46,10 @@ export default class App extends React.Component {
           <LocationMarker />
         </div>
       </div>
-      <div className="row">
-        <div id="map"></div>
+      <div className="row mt-lg-5">
+        <Wrapper apiKey={process.env.GOOGLE_MAPS_API_KEY} render={render}>
+          <Map />
+        </Wrapper>
       </div>
     </div>
     );
