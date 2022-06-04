@@ -6,7 +6,7 @@ drop schema "public" cascade;
 
 create schema "public";
 
- CREATE TABLE "public.locations" (
+ CREATE TABLE "public"."locations" (
 	"locationId" serial NOT NULL,
 	"restaurantName" TEXT NOT NULL,
 	"lat" float8 NOT NULL,
@@ -20,7 +20,7 @@ create schema "public";
 
 
 
-CREATE TABLE "public.comments" (
+CREATE TABLE "public"."comments" (
 	"commentId" serial NOT NULL,
 	"comment" TEXT NOT NULL,
 	"entryId" integer NOT NULL,
@@ -32,7 +32,7 @@ CREATE TABLE "public.comments" (
 
 
 
-CREATE TABLE "public.favoriteEntries" (
+CREATE TABLE "public"."favoriteEntries" (
 	"entryId" serial NOT NULL,
 	"locationId" integer NOT NULL,
 	"comment" TEXT NOT NULL,
