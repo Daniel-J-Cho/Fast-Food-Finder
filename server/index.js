@@ -16,6 +16,8 @@ app.get('/api/hello', (req, res) => {
   res.json({ hello: 'world' });
 });
 
+app.use(express.json());
+
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {

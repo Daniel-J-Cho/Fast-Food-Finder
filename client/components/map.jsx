@@ -8,7 +8,7 @@ class Map extends React.Component {
     this.state = {
       coords: null,
       locationList: [],
-      franchiseName: ''
+      franchiseName: 'In-N-Out'
     };
     this.map = null;
     this.marker = null;
@@ -43,29 +43,35 @@ class Map extends React.Component {
   handleDropdownClick(id) {
     this.setState({ franchiseName: id });
     // console.log(this.state);
+    this.handleLocationSearch();
   }
 
   // restaurant search method in-progress
   handleLocationSearch() {
     // console.log('this.props.franchiseName: ', this.props.franchiseName);
-    const mapViewCenter = this.map.getCenter();
     const baseUrl = 'https://maps.googleapis.com/maps/api/place/textsearch/json?';
-    const location = `location=${mapViewCenter.latitude},${mapViewCenter.longitude}}`;
     const query = `query=${this.state.franchiseName}`;
-    const radius = `&radius=${1000 * 1000}`;
+    const location = `&location=${this.state.coords.latitude},${this.state.coords.longitude}}`;
+    const radius = `&radius=${800 * 1000}`;
     const type = '&type=restaurant';
-    const key = '&key=process.env.GOOGLE_MAPS_API_KEY';
-    const url = baseUrl + location + query + radius + type + key;
-    fetch(url)
+    const key = `&key=${process.env.GOOGLE_MAPS_API_KEY}`;
+    const url = baseUrl + query + location + radius + type + key;
+    // console.log('url:', url);
+    fetch(url, {
+      method: 'GET',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
       .then(res => res.json())
-      .then(result => this.setState({ locationList: result }))
-      .then(this.state.locationList.map((item, index) => {
-        return <Marker key={index} position={{
-          lat: item.latitude,
-          lng: item.longitude
+      .then(results => this.setState({ locationList: results }))
+      .then(this.state.locationList.map(item => {
+        return <Marker key={item.place_id} position={{
+          lat: item.geometry.lat,
+          lng: item.geometry.lng
         }} map={this.map} />;
       }))
-
       .catch(err => console.error('error:', err));
 
   }
@@ -95,7 +101,7 @@ class Map extends React.Component {
             Select a restaurant
           </button>
           <ul className="dropdown-menu" aria-labelledby="dropdownMenu1">
-            <li><a className="dropdown-item" href="#" onClick={this.handleDropdownClick} data-bs-toggle='link' data-bs-target='McDonald&apos;s'>McDonald&apos;s</a></li>
+            <li><a className="dropdown-item" href="#" onClick={this.handleDropdownClick} id='McDonald&apos;s'>McDonald&apos;s</a></li>
             <li><a className="dropdown-item" href="#" onClick={this.handleDropdownClick} id='Taco Bell'>Taco Bell</a></li>
             <li><a className="dropdown-item" href="#" onClick={this.handleDropdownClick} id='In-N-Out'>In-N-Out</a></li>
             <li><a className="dropdown-item" href="#" onClick={this.handleDropdownClick} id='Chipotle'>Chipotle</a></li>
