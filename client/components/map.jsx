@@ -1,12 +1,21 @@
 import React from 'react';
+// import DropdownMenu from './dropdown.jsx';
+import { Marker } from '@googlemaps/react-wrapper';
+
 class Map extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { coords: null };
+    this.state = {
+      coords: null,
+      locationList: [],
+      franchiseName: ''
+    };
     this.map = null;
     this.marker = null;
     this.mapDivRef = React.createRef();
     this.handleClick = this.handleClick.bind(this);
+    this.handleDropdownClick = this.handleDropdownClick.bind(this);
+    this.handleLocationSearch = this.handleLocationSearch.bind(this);
   }
 
   componentDidMount() {
@@ -31,6 +40,36 @@ class Map extends React.Component {
     });
   }
 
+  handleDropdownClick(id) {
+    this.setState({ franchiseName: id });
+    // console.log(this.state);
+  }
+
+  // restaurant search method in-progress
+  handleLocationSearch() {
+    // console.log('this.props.franchiseName: ', this.props.franchiseName);
+    const mapViewCenter = this.map.getCenter();
+    const baseUrl = 'https://maps.googleapis.com/maps/api/place/textsearch/json?';
+    const location = `location=${mapViewCenter.latitude},${mapViewCenter.longitude}}`;
+    const query = `query=${this.state.franchiseName}`;
+    const radius = `&radius=${1000 * 1000}`;
+    const type = '&type=restaurant';
+    const key = '&key=process.env.GOOGLE_MAPS_API_KEY';
+    const url = baseUrl + location + query + radius + type + key;
+    fetch(url)
+      .then(res => res.json())
+      .then(result => this.setState({ locationList: result }))
+      .then(this.state.locationList.map((item, index) => {
+        return <Marker key={index} position={{
+          lat: item.latitude,
+          lng: item.longitude
+        }} map={this.map} />;
+      }))
+
+      .catch(err => console.error('error:', err));
+
+  }
+
   render() {
     return (
       <div>
@@ -50,6 +89,23 @@ class Map extends React.Component {
               </div>
             </div>
           </div>
+        </div>
+        <div className="dropdown">
+          <button className="btn btn-light dropdown-toggle" type="button" id="dropdownMenu1" data-bs-toggle="dropdown" aria-expanded="false">
+            Select a restaurant
+          </button>
+          <ul className="dropdown-menu" aria-labelledby="dropdownMenu1">
+            <li><a className="dropdown-item" href="#" onClick={this.handleDropdownClick} data-bs-toggle='link' data-bs-target='McDonald&apos;s'>McDonald&apos;s</a></li>
+            <li><a className="dropdown-item" href="#" onClick={this.handleDropdownClick} id='Taco Bell'>Taco Bell</a></li>
+            <li><a className="dropdown-item" href="#" onClick={this.handleDropdownClick} id='In-N-Out'>In-N-Out</a></li>
+            <li><a className="dropdown-item" href="#" onClick={this.handleDropdownClick} id='Chipotle'>Chipotle</a></li>
+            <li><a className="dropdown-item" href="#" onClick={this.handleDropdownClick} id='Burger King'>Burger King</a></li>
+            <li><a className="dropdown-item" href="#" onClick={this.handleDropdownClick} id='Del Taco'>Del Taco</a></li>
+            <li><a className="dropdown-item" href="#" onClick={this.handleDropdownClick} id='Carl&apos;s Jr'>Carl&apos;s Jr</a></li>
+            <li><a className="dropdown-item" href="#" onClick={this.handleDropdownClick} id='Wienerschnitzel'>Wienerschnitzel</a></li>
+            <li><a className="dropdown-item" href="#" onClick={this.handleDropdownClick} id='Subway'>Subway</a></li>
+            <li><a className="dropdown-item" href="#" onClick={this.handleDropdownClick} id='Jersey Mike&apos;s'>Jersey Mike&apos;s</a></li>
+          </ul>
         </div>
         <div ref={this.mapDivRef} style={{ height: '68vh', width: '81vw', margin: 'auto' }} />
       </div>

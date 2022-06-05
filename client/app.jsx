@@ -47,7 +47,7 @@ export default class App extends React.Component {
         </div>
       </div>
       <div className="row mt-lg-5">
-        <Wrapper apiKey={process.env.GOOGLE_MAPS_API_KEY} render={render}>
+        <Wrapper apiKey={process.env.GOOGLE_MAPS_API_KEY} render={render} libraries={['places']} >
           <Map />
         </Wrapper>
       </div>
