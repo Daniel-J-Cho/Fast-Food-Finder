@@ -18,6 +18,16 @@ app.get('/api/hello', (req, res) => {
 
 app.use(express.json());
 
+app.get('/api/locations', (req, res, next) => {
+  const query = req.query.query;
+  const location = req.query.location;
+  const radius = req.query.radius;
+  fetch(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${query}&location=${location}&radius=${radius}&type=restaurant&key=${process.env.GOOGLE_MAPS_API_KEY}`)
+    .then(fetchResponse => fetchResponse.json())
+    .then(data => res.json(data))
+    .catch(err => next(err));
+});
+
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {

@@ -32,7 +32,7 @@ export default class App extends React.Component {
       <div className="row">
         <MainHeader />
       </div>
-      <div className="row my-3">
+      <div className="row my-3 nav-row">
         <div className="home-button">
           <HomeButton />
         </div>

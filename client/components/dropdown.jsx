@@ -8,7 +8,7 @@ class DropdownMenu extends React.Component {
   }
 
   handleClick(id) {
-    if (this.state.franchiseName === '') {
+    if (this.state.franchiseName !== id) {
       this.setState({ franchiseName: id });
       // console.log(this.state);
     }
@@ -16,7 +16,7 @@ class DropdownMenu extends React.Component {
 
   render() {
     return (
-      <div className="dropdown">
+      <div className="dropdown-menu-2">
         <button className="btn btn-light dropdown-toggle" type="button" id="dropdownMenu1" data-bs-toggle="dropdown" aria-expanded="false">
           Select a restaurant
         </button>

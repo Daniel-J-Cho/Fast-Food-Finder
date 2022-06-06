@@ -7,6 +7,16 @@ body {
   font-family: "open sans", sans-serif;
 }
 
+/* .nav-row {
+  position: relative;
+}
+
+.dropdown-menu-main {
+  position: absolute;
+  top: 160px;
+  left: 370px;
+} */
+
 .home-button {
   width: 70px;
 }

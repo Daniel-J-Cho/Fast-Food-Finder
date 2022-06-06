@@ -8,7 +8,7 @@ class Map extends React.Component {
     this.state = {
       coords: null,
       locationList: [],
-      franchiseName: 'In-N-Out'
+      franchiseName: ''
     };
     this.map = null;
     this.marker = null;
@@ -40,38 +40,39 @@ class Map extends React.Component {
     });
   }
 
-  handleDropdownClick(id) {
-    this.setState({ franchiseName: id });
-    // console.log(this.state);
+  handleDropdownClick(event) {
+    this.setState({ franchiseName: event.target.textContent });
+    // console.log('this.state.franchiseName:', this.state.franchiseName);
     this.handleLocationSearch();
   }
 
   // restaurant search method in-progress
   handleLocationSearch() {
     // console.log('this.props.franchiseName: ', this.props.franchiseName);
-    const baseUrl = 'https://maps.googleapis.com/maps/api/place/textsearch/json?';
-    const query = `query=${this.state.franchiseName}`;
-    const location = `&location=${this.state.coords.latitude},${this.state.coords.longitude}}`;
-    const radius = `&radius=${800 * 1000}`;
-    const type = '&type=restaurant';
-    const key = `&key=${process.env.GOOGLE_MAPS_API_KEY}`;
-    const url = baseUrl + query + location + radius + type + key;
+    // const baseUrl = 'https://maps.googleapis.com/maps/api/place/textsearch/json?';
+    const query = `${this.state.franchiseName}`;
+    const location = `${this.state.coords.latitude},${this.state.coords.longitude}}`;
+    // const queryString = `&query=${this.state.franchiseName}`;
+    // const locationString = `&location=${this.state.coords.latitude},${this.state.coords.longitude}}`;
+    const radius = `${800 * 1000}`;
+    // const type = '&type=restaurant';
+    // const key = `&key=${process.env.GOOGLE_MAPS_API_KEY}`;
+    // const url = baseUrl + queryString + locationString + radius + type + key;
     // console.log('url:', url);
-    fetch(url, {
-      method: 'GET',
-      mode: 'no-cors',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
+    fetch(`/api/locations?query=${encodeURIComponent(query)}&location=${encodeURIComponent(location)}&radius=${radius}`)
       .then(res => res.json())
-      .then(results => this.setState({ locationList: results }))
-      .then(this.state.locationList.map(item => {
-        return <Marker key={item.place_id} position={{
-          lat: item.geometry.lat,
-          lng: item.geometry.lng
-        }} map={this.map} />;
-      }))
+      .then(results => {
+        this.setState({ locationList: results });
+        // console.log('this.state:', this.state);
+      })
+      .then(results => {
+        this.state.locationList.map(item => {
+          return <Marker key={item.place_id} position={{
+            lat: item.geometry.lat,
+            lng: item.geometry.lng
+          }} map={this.map} />;
+        });
+      })
       .catch(err => console.error('error:', err));
 
   }
@@ -96,21 +97,21 @@ class Map extends React.Component {
             </div>
           </div>
         </div>
-        <div className="dropdown">
+        <div className="dropdown-menu-main">
           <button className="btn btn-light dropdown-toggle" type="button" id="dropdownMenu1" data-bs-toggle="dropdown" aria-expanded="false">
             Select a restaurant
           </button>
           <ul className="dropdown-menu" aria-labelledby="dropdownMenu1">
-            <li><a className="dropdown-item" href="#" onClick={this.handleDropdownClick} id='McDonald&apos;s'>McDonald&apos;s</a></li>
-            <li><a className="dropdown-item" href="#" onClick={this.handleDropdownClick} id='Taco Bell'>Taco Bell</a></li>
-            <li><a className="dropdown-item" href="#" onClick={this.handleDropdownClick} id='In-N-Out'>In-N-Out</a></li>
-            <li><a className="dropdown-item" href="#" onClick={this.handleDropdownClick} id='Chipotle'>Chipotle</a></li>
-            <li><a className="dropdown-item" href="#" onClick={this.handleDropdownClick} id='Burger King'>Burger King</a></li>
-            <li><a className="dropdown-item" href="#" onClick={this.handleDropdownClick} id='Del Taco'>Del Taco</a></li>
-            <li><a className="dropdown-item" href="#" onClick={this.handleDropdownClick} id='Carl&apos;s Jr'>Carl&apos;s Jr</a></li>
-            <li><a className="dropdown-item" href="#" onClick={this.handleDropdownClick} id='Wienerschnitzel'>Wienerschnitzel</a></li>
-            <li><a className="dropdown-item" href="#" onClick={this.handleDropdownClick} id='Subway'>Subway</a></li>
-            <li><a className="dropdown-item" href="#" onClick={this.handleDropdownClick} id='Jersey Mike&apos;s'>Jersey Mike&apos;s</a></li>
+            <li><a className="dropdown-item" href="#" onClick={ event => this.handleDropdownClick(event) } id='McDonald&apos;s'>McDonald&apos;s</a></li>
+            <li><a className="dropdown-item" href="#" onClick={ event => this.handleDropdownClick(event) } id='Taco Bell'>Taco Bell</a></li>
+            <li><a className="dropdown-item" href="#" onClick={ event => this.handleDropdownClick(event) } id='In-N-Out'>In-N-Out</a></li>
+            <li><a className="dropdown-item" href="#" onClick={ event => this.handleDropdownClick(event) } id='Chipotle'>Chipotle</a></li>
+            <li><a className="dropdown-item" href="#" onClick={ event => this.handleDropdownClick(event) } id='Burger King'>Burger King</a></li>
+            <li><a className="dropdown-item" href="#" onClick={ event => this.handleDropdownClick(event) } id='Del Taco'>Del Taco</a></li>
+            <li><a className="dropdown-item" href="#" onClick={ event => this.handleDropdownClick(event) } id='Carl&apos;s Jr'>Carl&apos;s Jr</a></li>
+            <li><a className="dropdown-item" href="#" onClick={ event => this.handleDropdownClick(event) } id='Wienerschnitzel'>Wienerschnitzel</a></li>
+            <li><a className="dropdown-item" href="#" onClick={ event => this.handleDropdownClick(event) } id='Subway'>Subway</a></li>
+            <li><a className="dropdown-item" href="#" onClick={ event => this.handleDropdownClick(event) } id='Jersey Mike&apos;s'>Jersey Mike&apos;s</a></li>
           </ul>
         </div>
         <div ref={this.mapDivRef} style={{ height: '68vh', width: '81vw', margin: 'auto' }} />
