@@ -1,21 +1,21 @@
 import React from 'react';
-// import DropdownMenu from './dropdown.jsx';
-import { Marker } from '@googlemaps/react-wrapper';
 
 class Map extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      coords: null,
+      coords: { latitude: 33.669445, longitude: -117.823059 },
       locationList: [],
-      franchiseName: ''
+      franchiseName: '',
+      markers: []
     };
     this.map = null;
     this.marker = null;
     this.mapDivRef = React.createRef();
-    this.handleClick = this.handleClick.bind(this);
+    this.handleGeoClick = this.handleGeoClick.bind(this);
     this.handleDropdownClick = this.handleDropdownClick.bind(this);
     this.handleLocationSearch = this.handleLocationSearch.bind(this);
+    this.placeMarkers = this.placeMarkers.bind(this);
   }
 
   componentDidMount() {
@@ -28,7 +28,7 @@ class Map extends React.Component {
     }
   }
 
-  handleClick() {
+  handleGeoClick() {
     navigator.geolocation.getCurrentPosition(position => {
       if (position.coords) {
         this.setState({ coords: position.coords });
@@ -41,43 +41,59 @@ class Map extends React.Component {
   }
 
   handleDropdownClick(event) {
-    this.setState({ franchiseName: event.target.textContent });
-    // console.log('this.state.franchiseName:', this.state.franchiseName);
-    this.handleLocationSearch();
+    const ffName = event.target.textContent.replace(' ', '+');
+    this.setState({ franchiseName: ffName }, this.handleLocationSearch);
+    if (ffName !== this.state.franchiseName) {
+      for (let i = 0; i < this.state.markers.length; i++) {
+        this.setState({ markers: this.state.markers[i].setMap(null) });
+      }
+      this.setState({ markers: [] });
+    }
   }
 
   // restaurant search method in-progress
   handleLocationSearch() {
-    // console.log('this.props.franchiseName: ', this.props.franchiseName);
     // const baseUrl = 'https://maps.googleapis.com/maps/api/place/textsearch/json?';
-    const query = `${this.state.franchiseName}`;
-    const location = `${this.state.coords.latitude},${this.state.coords.longitude}}`;
-    // const queryString = `&query=${this.state.franchiseName}`;
-    // const locationString = `&location=${this.state.coords.latitude},${this.state.coords.longitude}}`;
-    const radius = `${800 * 1000}`;
+    // const queryString = `query=${this.state.franchiseName}`;
+    // const locationString = `&location=${this.state.coords.latitude}%2C${this.state.coords.longitude}`;
+    // const radiusString = `&radius=${8000}`;
     // const type = '&type=restaurant';
     // const key = `&key=${process.env.GOOGLE_MAPS_API_KEY}`;
-    // const url = baseUrl + queryString + locationString + radius + type + key;
+    // const url = baseUrl + queryString + locationString + radiusString + type + key;
     // console.log('url:', url);
+    const query = `${this.state.franchiseName}`;
+    const location = `${this.state.coords.latitude}%2C${this.state.coords.longitude}`;
+    const radius = `${8000}`;
     fetch(`/api/locations?query=${encodeURIComponent(query)}&location=${encodeURIComponent(location)}&radius=${radius}`)
       .then(res => res.json())
-      .then(results => {
-        this.setState({ locationList: results });
-        // console.log('this.state:', this.state);
-      })
-      .then(results => {
-        this.state.locationList.map(item => {
-          return <Marker key={item.place_id} position={{
-            lat: item.geometry.lat,
-            lng: item.geometry.lng
-          }} map={this.map} />;
-        });
+      .then(result => {
+        this.setState({ locationList: result.results }, this.placeMarkers);
       })
       .catch(err => console.error('error:', err));
+  }
 
+  placeMarkers() {
+    const markerArr = [];
+    const listArr = this.state.locationList;
+    const iconProps = {
+      url: '/images/burger_fries_icon.png',
+      scaledSize: new window.google.maps.Size(40, 30),
+      origin: new window.google.maps.Point(0, 0),
+      anchor: new window.google.maps.Point(0, 0)
+    };
+    for (let i = 0; i < listArr.length; i++) {
+      const marker = new window.google.maps.Marker({
+        position: new window.google.maps.LatLng(listArr[i].geometry.location.lat, listArr[i].geometry.location.lng),
+        map: this.map,
+        icon: iconProps
+      });
+      markerArr.push(marker);
+    }
+    this.setState({ markers: markerArr });
   }
 
   render() {
+    // console.log('this.state:', this.state);
     return (
       <div>
         <div className="modal" id="permModal" tabIndex="-1" aria-labelledby="permModalLabel" aria-hidden="true">
@@ -92,7 +108,7 @@ class Map extends React.Component {
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={this.handleClick}>Confirm</button>
+                <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={this.handleGeoClick}>Confirm</button>
               </div>
             </div>
           </div>
