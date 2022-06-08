@@ -2,7 +2,6 @@ import React from 'react';
 import MainHeader from './pages/main-header';
 import HomeButton from './components/home-button';
 import FavoritesButton from './components/favorites-button';
-import DropdownMenu from './components/dropdown';
 import LocationMarker from './components/location-marker';
 import { parseRoute } from './lib';
 import { Wrapper } from '@googlemaps/react-wrapper';
@@ -32,22 +31,19 @@ export default class App extends React.Component {
       <div className="row">
         <MainHeader />
       </div>
-      <div className="row my-3">
-        <div className="home-button">
+      <div className="row">
+        <div className="home-button d-flex align-items-center">
           <HomeButton />
         </div>
-        <div className="col-1 favorites-button">
+        <div className="col-1 favorites-button d-flex align-items-center">
           <FavoritesButton />
-        </div>
-        <div className="col-2 ms-sm-5 ms-md-5 ms-lg-4 dropdown-div">
-          <DropdownMenu />
         </div>
         <div className="col d-flex justify-content-end">
           <LocationMarker />
         </div>
       </div>
-      <div className="row mt-lg-5">
-        <Wrapper apiKey={process.env.GOOGLE_MAPS_API_KEY} render={render}>
+      <div className="row mt-lg-3">
+        <Wrapper apiKey={process.env.GOOGLE_MAPS_API_KEY} render={render} libraries={['places']} >
           <Map />
         </Wrapper>
       </div>
