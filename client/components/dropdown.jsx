@@ -3,15 +3,11 @@ import React from 'react';
 class DropdownMenu extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { franchiseName: '' };
     this.handleClick = this.handleClick.bind(this);
   }
 
-  handleClick(id) {
-    if (this.state.franchiseName !== id) {
-      this.setState({ franchiseName: id });
-      // console.log(this.state);
-    }
+  handleClick(event) {
+    this.props.onChange(event.target.textContent);
   }
 
   render() {
@@ -21,16 +17,16 @@ class DropdownMenu extends React.Component {
           Select a restaurant
         </button>
         <ul className="dropdown-menu" aria-labelledby="dropdownMenu1">
-          <li><a className="dropdown-item" href="#" onClick={this.handleClick} id='McDonald&apos;s'>McDonald&apos;s</a></li>
-          <li><a className="dropdown-item" href="#" onClick={this.handleClick} id= 'Taco Bell'>Taco Bell</a></li>
-          <li><a className="dropdown-item" href="#" onClick={this.handleClick} id='In-N-Out'>In-N-Out</a></li>
-          <li><a className="dropdown-item" href="#" onClick={this.handleClick} id='Chipotle'>Chipotle</a></li>
-          <li><a className="dropdown-item" href="#" onClick={this.handleClick} id='Burger King'>Burger King</a></li>
-          <li><a className="dropdown-item" href="#" onClick={this.handleClick} id='Del Taco'>Del Taco</a></li>
-          <li><a className="dropdown-item" href="#" onClick={this.handleClick} id='Carl&apos;s Jr'>Carl&apos;s Jr</a></li>
-          <li><a className="dropdown-item" href="#" onClick={this.handleClick} id='Wienerschnitzel'>Wienerschnitzel</a></li>
-          <li><a className="dropdown-item" href="#" onClick={this.handleClick} id='Subway'>Subway</a></li>
-          <li><a className="dropdown-item" href="#" onClick={this.handleClick} id='Jersey Mike&apos;s'>Jersey Mike&apos;s</a></li>
+          <li><a className="dropdown-item" href="#" onClick={event => this.handleClick(event)} id='McDonald&apos;s'>McDonald&apos;s</a></li>
+          <li><a className="dropdown-item" href="#" onClick={event => this.handleClick(event)} id= 'Taco Bell'>Taco Bell</a></li>
+          <li><a className="dropdown-item" href="#" onClick={event => this.handleClick(event)} id='In-N-Out'>In-N-Out</a></li>
+          <li><a className="dropdown-item" href="#" onClick={event => this.handleClick(event)} id='Chipotle'>Chipotle</a></li>
+          <li><a className="dropdown-item" href="#" onClick={event => this.handleClick(event)} id='Burger King'>Burger King</a></li>
+          <li><a className="dropdown-item" href="#" onClick={event => this.handleClick(event)} id='Del Taco'>Del Taco</a></li>
+          <li><a className="dropdown-item" href="#" onClick={event => this.handleClick(event)} id='Carl&apos;s Jr'>Carl&apos;s Jr</a></li>
+          <li><a className="dropdown-item" href="#" onClick={event => this.handleClick(event)} id='Wienerschnitzel'>Wienerschnitzel</a></li>
+          <li><a className="dropdown-item" href="#" onClick={event => this.handleClick(event)} id='Subway'>Subway</a></li>
+          <li><a className="dropdown-item" href="#" onClick={event => this.handleClick(event)} id='Jersey Mike&apos;s'>Jersey Mike&apos;s</a></li>
         </ul>
       </div>
     );

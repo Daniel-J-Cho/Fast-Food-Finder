@@ -16,6 +16,14 @@ class Map extends React.Component {
     this.handleDropdownClick = this.handleDropdownClick.bind(this);
     this.handleLocationSearch = this.handleLocationSearch.bind(this);
     this.placeMarkers = this.placeMarkers.bind(this);
+    this.clearMarkers = this.clearMarkers.bind(this);
+  }
+
+  clearMarkers() {
+    for (let i = 0; i < this.state.markers.length; i++) {
+      this.setState({ markers: this.state.markers[i].setMap(null) });
+    }
+    this.setState({ markers: [] });
   }
 
   componentDidMount() {
@@ -26,6 +34,7 @@ class Map extends React.Component {
     if (this.map) {
       this.map.setOptions({ zoom: 11, center: { lat: 33.669445, lng: -117.823059 } });
     }
+    this.clearMarkers();
   }
 
   handleGeoClick() {
@@ -38,20 +47,25 @@ class Map extends React.Component {
         this.marker.setMap(this.map);
       }
     });
+    this.clearMarkers();
   }
 
   handleDropdownClick(event) {
     const ffName = event.target.textContent.replace(' ', '+');
-    this.setState({ franchiseName: ffName }, this.handleLocationSearch);
     if (ffName !== this.state.franchiseName) {
-      for (let i = 0; i < this.state.markers.length; i++) {
-        this.setState({ markers: this.state.markers[i].setMap(null) });
-      }
-      this.setState({ markers: [] });
+      this.clearMarkers();
+    } else if (this.state.franchiseName) {
+      this.clearMarkers();
     }
+    if (this.state.coords.latitude !== this.map.getCenter().lat() || this.state.coords.longitude !== this.map.getCenter().lng()) {
+      this.setState({ coords: { latitude: this.map.getCenter().lat(), longitude: this.map.getCenter().lng() } });
+      if (this.state.franchiseName) {
+        this.clearMarkers();
+      }
+    }
+    this.setState({ franchiseName: ffName }, this.handleLocationSearch);
   }
 
-  // restaurant search method in-progress
   handleLocationSearch() {
     // const baseUrl = 'https://maps.googleapis.com/maps/api/place/textsearch/json?';
     // const queryString = `query=${this.state.franchiseName}`;
@@ -76,24 +90,25 @@ class Map extends React.Component {
     const markerArr = [];
     const listArr = this.state.locationList;
     const iconProps = {
-      url: '/images/burger_fries_icon.png',
+      url: '/images/fries-icon.png',
       scaledSize: new window.google.maps.Size(40, 30),
       origin: new window.google.maps.Point(0, 0),
-      anchor: new window.google.maps.Point(0, 0)
+      anchor: new window.google.maps.Point(20, 25)
     };
     for (let i = 0; i < listArr.length; i++) {
       const marker = new window.google.maps.Marker({
         position: new window.google.maps.LatLng(listArr[i].geometry.location.lat, listArr[i].geometry.location.lng),
         map: this.map,
-        icon: iconProps
+        icon: iconProps,
+        setClickableIcons: false
       });
+      marker.setAnimation(window.google.maps.Animation.DROP);
       markerArr.push(marker);
     }
     this.setState({ markers: markerArr });
   }
 
   render() {
-    // console.log('this.state:', this.state);
     return (
       <div>
         <div className="modal" id="permModal" tabIndex="-1" aria-labelledby="permModalLabel" aria-hidden="true">
@@ -113,24 +128,26 @@ class Map extends React.Component {
             </div>
           </div>
         </div>
-        <div className="dropdown-menu-main">
-          <button className="btn btn-light dropdown-toggle" type="button" id="dropdownMenu1" data-bs-toggle="dropdown" aria-expanded="false">
-            Select a restaurant
-          </button>
-          <ul className="dropdown-menu" aria-labelledby="dropdownMenu1">
-            <li><a className="dropdown-item" href="#" onClick={ event => this.handleDropdownClick(event) } id='McDonald&apos;s'>McDonald&apos;s</a></li>
-            <li><a className="dropdown-item" href="#" onClick={ event => this.handleDropdownClick(event) } id='Taco Bell'>Taco Bell</a></li>
-            <li><a className="dropdown-item" href="#" onClick={ event => this.handleDropdownClick(event) } id='In-N-Out'>In-N-Out</a></li>
-            <li><a className="dropdown-item" href="#" onClick={ event => this.handleDropdownClick(event) } id='Chipotle'>Chipotle</a></li>
-            <li><a className="dropdown-item" href="#" onClick={ event => this.handleDropdownClick(event) } id='Burger King'>Burger King</a></li>
-            <li><a className="dropdown-item" href="#" onClick={ event => this.handleDropdownClick(event) } id='Del Taco'>Del Taco</a></li>
-            <li><a className="dropdown-item" href="#" onClick={ event => this.handleDropdownClick(event) } id='Carl&apos;s Jr'>Carl&apos;s Jr</a></li>
-            <li><a className="dropdown-item" href="#" onClick={ event => this.handleDropdownClick(event) } id='Wienerschnitzel'>Wienerschnitzel</a></li>
-            <li><a className="dropdown-item" href="#" onClick={ event => this.handleDropdownClick(event) } id='Subway'>Subway</a></li>
-            <li><a className="dropdown-item" href="#" onClick={ event => this.handleDropdownClick(event) } id='Jersey Mike&apos;s'>Jersey Mike&apos;s</a></li>
-          </ul>
+        <div className="row mb-4">
+          <div className="dropdown-menu-main">
+            <button className="btn btn-light dropdown-toggle" type="button" id="dropdownMenu1" data-bs-toggle="dropdown" aria-expanded="false">
+              Select a restaurant
+            </button>
+            <ul className="dropdown-menu" aria-labelledby="dropdownMenu1">
+              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)} id='McDonald&apos;s'>McDonald&apos;s</a></li>
+              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)} id='Taco Bell'>Taco Bell</a></li>
+              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)} id='In-N-Out'>In-N-Out</a></li>
+              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)} id='Chipotle'>Chipotle</a></li>
+              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)} id='Burger King'>Burger King</a></li>
+              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)} id='Del Taco'>Del Taco</a></li>
+              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)} id='Carl&apos;s Jr'>Carl&apos;s Jr</a></li>
+              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)} id='Wienerschnitzel'>Wienerschnitzel</a></li>
+              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)} id='Subway'>Subway</a></li>
+              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)} id='Jersey Mike&apos;s'>Jersey Mike&apos;s</a></li>
+            </ul>
+          </div>
         </div>
-        <div ref={this.mapDivRef} style={{ height: '68vh', width: '81vw', margin: 'auto' }} />
+        <div ref={this.mapDivRef} style={{ height: '73vh', width: '81vw', margin: 'auto' }} />
       </div>
     );
   }
