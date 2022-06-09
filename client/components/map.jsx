@@ -7,7 +7,8 @@ class Map extends React.Component {
       coords: { latitude: 33.669445, longitude: -117.823059 },
       locationList: [],
       franchiseName: '',
-      markers: []
+      markers: [],
+      infowindow: null
     };
     this.map = null;
     this.marker = null;
@@ -17,6 +18,7 @@ class Map extends React.Component {
     this.handleLocationSearch = this.handleLocationSearch.bind(this);
     this.placeMarkers = this.placeMarkers.bind(this);
     this.clearMarkers = this.clearMarkers.bind(this);
+    this.handleMarkerClick = this.handleMarkerClick.bind(this);
   }
 
   clearMarkers() {
@@ -100,12 +102,45 @@ class Map extends React.Component {
         position: new window.google.maps.LatLng(listArr[i].geometry.location.lat, listArr[i].geometry.location.lng),
         map: this.map,
         icon: iconProps,
-        setClickableIcons: false
+        placeId: listArr[i].place_id,
+        restName: listArr[i].name,
+        restAddress: listArr[i].formatted_address,
+        restRating: listArr[i].rating,
+        restTotalRatings: listArr[i].user_ratings_total
       });
       marker.setAnimation(window.google.maps.Animation.DROP);
       markerArr.push(marker);
     }
-    this.setState({ markers: markerArr });
+    this.setState({ markers: markerArr }, this.handleMarkerClick);
+  }
+
+  handleMarkerClick(event) {
+    let currWindow = false;
+    const markersForInfoWindow = this.state.markers;
+    markersForInfoWindow.forEach(marker => {
+      const contentString =
+        `<div class="info-window-header"><h6 class="info-header-text">${marker.restName}</h6></div>` + '<hr class="horizontal-line">' +
+        `<div class="address-div"><p class="address-text">Address:&nbsp&nbsp${marker.restAddress}</p></div>` +
+        `<div class="rating-div"><p class="rating-text">Rating: ${marker.restRating}&nbspout of 5&nbsp&nbsp&nbsp(Number of ratings: ${marker.restTotalRatings})</p></div>` +
+        '<div class="add-fav-button-div"><button type=button class="add-fav-button">Add to Favorites</button></div>';
+      const infoWindow = new window.google.maps.InfoWindow({
+        content: contentString
+      });
+      marker.addListener('click', event => {
+        if (currWindow) {
+          currWindow.close();
+        }
+        currWindow = infoWindow;
+        infoWindow.open({
+          anchor: marker,
+          map: this.map
+        });
+      });
+      this.map.addListener('click', () => {
+        infoWindow.close();
+      });
+    });
+
   }
 
   render() {
