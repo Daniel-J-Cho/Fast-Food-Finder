@@ -8,17 +8,21 @@ class Map extends React.Component {
       locationList: [],
       franchiseName: '',
       markers: [],
-      infowindow: null
+      address: ''
     };
     this.map = null;
     this.marker = null;
+    this.autoComplete = null;
     this.mapDivRef = React.createRef();
+    this.autoCompleteRef = React.createRef();
     this.handleGeoClick = this.handleGeoClick.bind(this);
     this.handleDropdownClick = this.handleDropdownClick.bind(this);
     this.handleLocationSearch = this.handleLocationSearch.bind(this);
     this.placeMarkers = this.placeMarkers.bind(this);
     this.clearMarkers = this.clearMarkers.bind(this);
     this.handleMarkerClick = this.handleMarkerClick.bind(this);
+    this.initAutoComplete = this.initAutoComplete.bind(this);
+    this.onPlaceChanged = this.onPlaceChanged.bind(this);
   }
 
   clearMarkers() {
@@ -37,6 +41,7 @@ class Map extends React.Component {
       this.map.setOptions({ zoom: 11, center: { lat: 33.669445, lng: -117.823059 } });
     }
     this.clearMarkers();
+    this.initAutoComplete();
   }
 
   handleGeoClick() {
@@ -54,11 +59,7 @@ class Map extends React.Component {
 
   handleDropdownClick(event) {
     const ffName = event.target.textContent.replace(' ', '+');
-    if (ffName !== this.state.franchiseName) {
-      this.clearMarkers();
-    } else if (this.state.franchiseName) {
-      this.clearMarkers();
-    }
+    this.clearMarkers();
     if (this.state.coords.latitude !== this.map.getCenter().lat() || this.state.coords.longitude !== this.map.getCenter().lng()) {
       this.setState({ coords: { latitude: this.map.getCenter().lat(), longitude: this.map.getCenter().lng() } });
       if (this.state.franchiseName) {
@@ -88,14 +89,44 @@ class Map extends React.Component {
       .catch(err => console.error('error:', err));
   }
 
+  initAutoComplete() {
+    if (this.autoCompleteRef.current && !this.autoComplete) {
+      this.autoComplete = new window.google.maps.places.Autocomplete(this.autoCompleteRef.current,
+        {
+          types: ['restaurant'],
+          componentRestrictions: { country: ['us'] },
+          fields: ['place_id', 'geometry', 'name']
+        });
+    }
+    this.autoComplete.addListener('place_changed', this.onPlaceChanged);
+    // console.log('this.autoComplete:', this.autoComplete);
+  }
+
+  onPlaceChanged() {
+    const place = this.autoComplete.getPlace();
+    // console.log('place:', place);
+
+    if (!place.geometry) {
+      this.setState({ address: 'Enter a place' });
+    } else {
+      this.setState({ coords: { latitude: place.geometry.location.lat, longitude: place.geometry.location.lng } });
+      this.setState({ address: place.name });
+      // calling this.handleLocationSearch here gives a variety of restaurants and not the one you typed in the search bar
+      // this.handleLocationSearch();
+      // if (this.state.franchiseName) {
+      //   this.clearMarkers();
+      // }
+    }
+  }
+
   placeMarkers() {
     const markerArr = [];
     const listArr = this.state.locationList;
     const iconProps = {
       url: '/images/fries-icon.png',
-      scaledSize: new window.google.maps.Size(40, 30),
       origin: new window.google.maps.Point(0, 0),
-      anchor: new window.google.maps.Point(20, 25)
+      anchor: new window.google.maps.Point(20, 25),
+      scaledSize: new window.google.maps.Size(40, 30)
     };
     for (let i = 0; i < listArr.length; i++) {
       const marker = new window.google.maps.Marker({
@@ -144,6 +175,7 @@ class Map extends React.Component {
   }
 
   render() {
+    // console.log('this.state:', this.state);
     return (
       <div>
         <div className="modal" id="permModal" tabIndex="-1" aria-labelledby="permModalLabel" aria-hidden="true">
@@ -164,22 +196,34 @@ class Map extends React.Component {
           </div>
         </div>
         <div className="row mb-4">
-          <div className="dropdown-menu-main">
+          <div className="dropdown-menu-main col-2">
             <button className="btn btn-light dropdown-toggle" type="button" id="dropdownMenu1" data-bs-toggle="dropdown" aria-expanded="false">
               Select a restaurant
             </button>
             <ul className="dropdown-menu" aria-labelledby="dropdownMenu1">
-              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)} id='McDonald&apos;s'>McDonald&apos;s</a></li>
-              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)} id='Taco Bell'>Taco Bell</a></li>
-              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)} id='In-N-Out'>In-N-Out</a></li>
-              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)} id='Chipotle'>Chipotle</a></li>
-              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)} id='Burger King'>Burger King</a></li>
-              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)} id='Del Taco'>Del Taco</a></li>
-              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)} id='Carl&apos;s Jr'>Carl&apos;s Jr</a></li>
-              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)} id='Wienerschnitzel'>Wienerschnitzel</a></li>
-              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)} id='Subway'>Subway</a></li>
-              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)} id='Jersey Mike&apos;s'>Jersey Mike&apos;s</a></li>
+              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)}>McDonald&apos;s</a></li>
+              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)}>Taco Bell</a></li>
+              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)}>In-N-Out</a></li>
+              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)}>Chipotle</a></li>
+              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)}>Burger King</a></li>
+              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)}>Del Taco</a></li>
+              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)}>Carl&apos;s Jr</a></li>
+              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)}>Wendy&apos;s</a></li>
+              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)}>Wienerschnitzel</a></li>
+              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)}>Subway</a></li>
+              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)}>Jersey Mike&apos;s</a></li>
+              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)}>Mendocino Farms</a></li>
+              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)}>KFC</a></li>
+              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)}>Popeye&apos;s</a></li>
+              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)}>Church&apos;s Chicken</a></li>
+              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)}>Domino&apos;s</a></li>
+              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)}>Pizza Hut</a></li>
+              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)}>Krispy Kreme</a></li>
+              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)}>Dunkin&apos;</a></li>
             </ul>
+          </div>
+          <div className="autocomplete-div col d-flex justify-content-end">
+            <input ref={this.autoCompleteRef} id="autocomplete" placeholder="Enter a place" type="text" />
           </div>
         </div>
         <div ref={this.mapDivRef} style={{ height: '73vh', width: '81vw', margin: 'auto' }} />
