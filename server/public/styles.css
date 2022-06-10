@@ -25,6 +25,10 @@ body {
   height: 30px;
 }
 
+#searchbox {
+  width: 1050px;
+}
+
 .horizontal-line {
   color: rgb(255, 0, 0);
   height: 3px;
@@ -38,11 +42,11 @@ body {
 }
 
 .header-text {
-  text-shadow: 3px 2px 2px rgb(255, 89, 0);
+  text-shadow: 3px 2px 2px rgb(53, 158, 43);
 }
 
 .header-text-two {
-  text-shadow: 3px 2px 2px rgb(53, 158, 43);
+  text-shadow: 3px 2px 2px rgb(255, 89, 0);
 }
 
 .header-text-three {
@@ -64,8 +68,8 @@ body {
 }
 
 .info-header-text {
-  color: rgb(54, 11, 11);
-  text-shadow: 3px 2px 2px rgba(198, 216, 198, 0.683);
+  color: darkslategrey;
+  text-shadow: 2px 2px 2px rgba(255, 196, 0, 0.835);
 }
 
 .rating-div {
@@ -73,7 +77,22 @@ body {
   font-weight: 500;
 }
 
+.search-button {
+  height: 37px;
+}
+
+@media (max-width: 1400px) {
+  #searchbox {
+    width: 755px;
+  }
+}
+
 @media (max-width: 575px) {
+  #searchbox {
+    margin-top: 12px;
+    width: 400px;
+  }
+
   .dropdown-menu-main {
     margin-left: 35px;
   }
@@ -85,5 +104,17 @@ body {
   .col.d-flex {
     margin-right: 40px;
     margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 767px) {
+  #searchbox {
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 991px) {
+  #searchbox {
+    margin-top: 10px;
   }
 }
