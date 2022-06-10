@@ -25,7 +25,7 @@ body {
   height: 30px;
 }
 
-#autocomplete {
+#searchbox {
   width: 1050px;
 }
 
@@ -81,7 +81,18 @@ body {
   height: 37px;
 }
 
+@media (max-width: 1400px) {
+  #searchbox {
+    width: 755px;
+  }
+}
+
 @media (max-width: 575px) {
+  #searchbox {
+    margin-top: 12px;
+    width: 400px;
+  }
+
   .dropdown-menu-main {
     margin-left: 35px;
   }
@@ -93,5 +104,17 @@ body {
   .col.d-flex {
     margin-right: 40px;
     margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 767px) {
+  #searchbox {
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 991px) {
+  #searchbox {
+    margin-top: 10px;
   }
 }

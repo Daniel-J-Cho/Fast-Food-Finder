@@ -12,17 +12,18 @@ class Map extends React.Component {
     };
     this.map = null;
     this.marker = null;
-    this.autoComplete = null;
+    this.searchBox = null;
     this.mapDivRef = React.createRef();
-    this.autoCompleteRef = React.createRef();
+    this.searchBoxRef = React.createRef();
     this.handleGeoClick = this.handleGeoClick.bind(this);
     this.handleDropdownClick = this.handleDropdownClick.bind(this);
     this.handleLocationSearch = this.handleLocationSearch.bind(this);
     this.placeMarkers = this.placeMarkers.bind(this);
     this.clearMarkers = this.clearMarkers.bind(this);
     this.handleMarkerClick = this.handleMarkerClick.bind(this);
-    this.initAutoComplete = this.initAutoComplete.bind(this);
+    this.initSearchBox = this.initSearchBox.bind(this);
     this.onPlaceChanged = this.onPlaceChanged.bind(this);
+    this.searchBoxMarker = this.searchBoxMarker.bind(this);
   }
 
   clearMarkers() {
@@ -41,7 +42,7 @@ class Map extends React.Component {
       this.map.setOptions({ zoom: 11, center: { lat: 33.669445, lng: -117.823059 } });
     }
     this.clearMarkers();
-    this.initAutoComplete();
+    this.initSearchBox();
   }
 
   handleGeoClick() {
@@ -64,6 +65,7 @@ class Map extends React.Component {
       this.setState({ coords: { latitude: this.map.getCenter().lat(), longitude: this.map.getCenter().lng() } });
       if (this.state.franchiseName) {
         this.clearMarkers();
+        this.marker.setMap(null);
       }
     }
     this.setState({ franchiseName: ffName }, this.handleLocationSearch);
@@ -89,34 +91,34 @@ class Map extends React.Component {
       .catch(err => console.error('error:', err));
   }
 
-  initAutoComplete() {
-    if (this.autoCompleteRef.current && !this.autoComplete) {
-      this.autoComplete = new window.google.maps.places.Autocomplete(this.autoCompleteRef.current,
+  initSearchBox() {
+    if (this.searchBoxRef.current && !this.searchBox) {
+      this.searchBox = new window.google.maps.places.SearchBox(this.searchBoxRef.current,
         {
-          types: ['restaurant'],
           componentRestrictions: { country: ['us'] },
-          fields: ['place_id', 'geometry', 'name']
+          fields: ['place_id', 'geometry', 'formatted_address']
         });
     }
-    this.autoComplete.addListener('place_changed', this.onPlaceChanged);
-    // console.log('this.autoComplete:', this.autoComplete);
+    this.searchBox.addListener('places_changed', this.onPlaceChanged);
   }
 
   onPlaceChanged() {
-    const place = this.autoComplete.getPlace();
-    // console.log('place:', place);
+    const place = this.searchBox.getPlaces();
 
-    if (!place.geometry) {
+    if (!place[0].geometry) {
       this.setState({ address: 'Enter a place' });
     } else {
-      this.setState({ coords: { latitude: place.geometry.location.lat, longitude: place.geometry.location.lng } });
-      this.setState({ address: place.name });
-      // calling this.handleLocationSearch here gives a variety of restaurants and not the one you typed in the search bar
-      // this.handleLocationSearch();
-      // if (this.state.franchiseName) {
-      //   this.clearMarkers();
-      // }
+      this.setState({ coords: { latitude: place[0].geometry.location.lat, longitude: place[0].geometry.location.lng } }, this.searchBoxMarker);
+      this.setState({ address: place[0].formatted_address });
     }
+  }
+
+  searchBoxMarker() {
+    this.map.setCenter({ lat: this.state.coords.latitude(), lng: this.state.coords.longitude() });
+    this.marker = new window.google.maps.Marker({
+      position: { lat: this.state.coords.latitude(), lng: this.state.coords.longitude() },
+      map: this.map
+    });
   }
 
   placeMarkers() {
@@ -175,7 +177,6 @@ class Map extends React.Component {
   }
 
   render() {
-    // console.log('this.state:', this.state);
     return (
       <div>
         <div className="modal" id="permModal" tabIndex="-1" aria-labelledby="permModalLabel" aria-hidden="true">
@@ -195,7 +196,7 @@ class Map extends React.Component {
             </div>
           </div>
         </div>
-        <div className="row mb-4">
+        <div className="row mb-md-4 mb-sm-2">
           <div className="dropdown-menu-main col-2">
             <button className="btn btn-light dropdown-toggle" type="button" id="dropdownMenu1" data-bs-toggle="dropdown" aria-expanded="false">
               Select a restaurant
@@ -222,8 +223,8 @@ class Map extends React.Component {
               <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)}>Dunkin&apos;</a></li>
             </ul>
           </div>
-          <div className="autocomplete-div col d-flex justify-content-end">
-            <input ref={this.autoCompleteRef} id="autocomplete" placeholder="Enter a place" type="text" />
+          <div className="searchbox-div col d-flex justify-content-end">
+            <input ref={this.searchBoxRef} id="searchbox" placeholder="Enter an address" type="text" />
           </div>
         </div>
         <div ref={this.mapDivRef} style={{ height: '73vh', width: '81vw', margin: 'auto' }} />
