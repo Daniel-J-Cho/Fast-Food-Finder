@@ -72,14 +72,6 @@ class Map extends React.Component {
   }
 
   handleLocationSearch() {
-    // const baseUrl = 'https://maps.googleapis.com/maps/api/place/textsearch/json?';
-    // const queryString = `query=${this.state.franchiseName}`;
-    // const locationString = `&location=${this.state.coords.latitude}%2C${this.state.coords.longitude}`;
-    // const radiusString = `&radius=${8000}`;
-    // const type = '&type=restaurant';
-    // const key = `&key=${process.env.GOOGLE_MAPS_API_KEY}`;
-    // const url = baseUrl + queryString + locationString + radiusString + type + key;
-    // console.log('url:', url);
     const query = `${this.state.franchiseName}`;
     const location = `${this.state.coords.latitude}%2C${this.state.coords.longitude}`;
     const radius = `${8000}`;
