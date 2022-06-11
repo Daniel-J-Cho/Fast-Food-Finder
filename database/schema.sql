@@ -9,10 +9,7 @@ create schema "public";
  CREATE TABLE "public"."locations" (
 	"locationId" serial NOT NULL,
 	"restaurantName" TEXT NOT NULL,
-	"lat" float8 NOT NULL,
-	"lng" float8 NOT NULL,
 	"address" TEXT NOT NULL,
-	"googlePlaceId" TEXT NOT NULL,
 	CONSTRAINT "locations_pk" PRIMARY KEY ("locationId")
 ) WITH (
   OIDS=FALSE
@@ -36,7 +33,6 @@ CREATE TABLE "public"."favoriteEntries" (
 	"entryId" serial NOT NULL,
 	"locationId" integer NOT NULL,
 	"comment" TEXT NOT NULL,
-	"logoUrl" TEXT NOT NULL,
 	"createdAt" timestamptz NOT NULL,
 	CONSTRAINT "favoriteEntries_pk" PRIMARY KEY ("entryId")
 ) WITH (
