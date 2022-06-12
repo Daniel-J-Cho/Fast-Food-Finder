@@ -12,6 +12,7 @@ class Map extends React.Component {
     };
     this.map = null;
     this.marker = null;
+    this.markerForSearchBox = null;
     this.searchBox = null;
     this.mapDivRef = React.createRef();
     this.searchBoxRef = React.createRef();
@@ -55,6 +56,9 @@ class Map extends React.Component {
         this.marker.setMap(this.map);
       }
     });
+    if (this.markerForSearchBox) {
+      this.markerForSearchBox.setMap(null);
+    }
     this.clearMarkers();
   }
 
@@ -65,7 +69,9 @@ class Map extends React.Component {
       this.setState({ coords: { latitude: this.map.getCenter().lat(), longitude: this.map.getCenter().lng() } });
       if (this.state.franchiseName) {
         this.clearMarkers();
-        this.marker.setMap(null);
+        if (this.marker) {
+          this.marker.setMap(null);
+        }
       }
     }
     this.setState({ franchiseName: ffName }, this.handleLocationSearch);
@@ -107,7 +113,7 @@ class Map extends React.Component {
 
   searchBoxMarker() {
     this.map.setCenter({ lat: this.state.coords.latitude(), lng: this.state.coords.longitude() });
-    this.marker = new window.google.maps.Marker({
+    this.markerForSearchBox = new window.google.maps.Marker({
       position: { lat: this.state.coords.latitude(), lng: this.state.coords.longitude() },
       map: this.map
     });
@@ -216,10 +222,10 @@ class Map extends React.Component {
             </ul>
           </div>
           <div className="searchbox-div col d-flex justify-content-end">
-            <input ref={this.searchBoxRef} id="searchbox" placeholder="Enter an address" type="text" />
+            <input ref={this.searchBoxRef} id="searchbox" className="searchbox" placeholder="Enter an address" type="text" />
           </div>
         </div>
-        <div ref={this.mapDivRef} style={{ height: '73vh', width: '81vw', margin: 'auto' }} />
+        <div ref={this.mapDivRef} className="map-div" style={{ height: '73vh', width: '81vw', margin: 'auto' }} />
       </div>
     );
   }
