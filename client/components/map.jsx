@@ -153,7 +153,7 @@ class Map extends React.Component {
         `<div class="info-window-header"><h6 class="info-header-text">${marker.restName}</h6></div>` + '<hr class="horizontal-line">' +
         `<div class="address-div"><p class="address-text">Address:&nbsp&nbsp${marker.restAddress}</p></div>` +
         `<div class="rating-div"><p class="rating-text">Rating: ${marker.restRating}&nbspout of 5&nbsp&nbsp&nbsp(Number of ratings: ${marker.restTotalRatings})</p></div>` +
-        '<div class="add-fav-button-div"><button type=button class="add-fav-button">Add to Favorites</button></div>';
+        '<div class="add-fav-button-div"><button type="submit" class="add-fav-button">Add to Favorites</button></div>';
       const infoWindow = new window.google.maps.InfoWindow({
         content: contentString
       });

@@ -9,12 +9,12 @@ body {
 
 .address-div {
   margin: 0 5px;
-  font-weight: 500;
+  font-weight: 450;
 }
 
 .address-text,
 .rating-text {
-  color: rgb(94, 6, 6);
+  color: rgb(18, 6, 94);
 }
 
 .add-fav-button {
@@ -75,13 +75,13 @@ body {
 }
 
 .info-header-text {
-  color: darkslategrey;
-  text-shadow: 2px 2px 2px rgba(0, 234, 255, 0.506);
+  color: rgb(49, 58, 232);
+  text-shadow: 1.5px 1px 5px rgb(255, 102, 0);
 }
 
 .rating-div {
   margin: 0 5px;
-  font-weight: 500;
+  font-weight: 450;
 }
 
 .search-button {

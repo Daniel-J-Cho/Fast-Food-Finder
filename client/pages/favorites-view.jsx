@@ -1,5 +1,6 @@
 import React from 'react';
 import HomeButton from '../components/home-button';
+import EntryBox from '../components/entry-box';
 
 class FavoritesView extends React.Component {
   constructor(props) {
@@ -16,6 +17,9 @@ class FavoritesView extends React.Component {
           <div className="home-button d-flex align-items-center">
             <HomeButton />
           </div>
+        </div>
+        <div>
+          <EntryBox />
         </div>
       </div>
     );
