@@ -1,12 +1,13 @@
 import React from 'react';
 
 function EntryBox(props) {
+  // console.log('props.restAddress:', props.restAddress);
+  // console.log('props.restName:', props.restName);
   return (
     <div className="card">
-      <img src="/images/200.gif" className="card-img-top" alt="..."></img>
       <div className="card-body">
-        <h5 className="card-title">Franchise name goes here</h5>
-        <p className="card-text">Address goes here</p>
+        <h5 className="card-title">{props.restName}</h5>
+        <p className="card-text">{props.restAddress}</p>
         <p className="card-text">make this a bullet-pointed comment</p>
         <div className="row">
           <div className="d-flex justify-content-around">

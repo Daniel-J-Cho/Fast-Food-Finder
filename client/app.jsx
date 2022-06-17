@@ -12,14 +12,40 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      restName: '',
+      restAddress: '',
       route: parseRoute(window.location.hash)
     };
+    this.updateRestNameAddress = this.updateRestNameAddress.bind(this);
+    this.renderEntryCard = this.renderEntryCard.bind(this);
   }
 
   componentDidMount() {
     window.addEventListener('hashchange', () => {
       this.setState({ route: parseRoute(window.location.hash) });
     });
+  }
+
+  renderEntryCard() {
+    <div className="card">
+      <div className="card-body">
+        <h5 className="card-title" >{this.state.restName}</h5>
+        <p className="card-text" >{this.state.restAddress}</p>
+        <p className="card-text">make this a bullet-pointed comment</p>
+        <div className="row">
+          <div className="d-flex justify-content-around">
+            <button type="button" className="btn btn-primary">Add Comment</button>
+            <button type="button" className="btn btn-secondary">Edit Comment</button>
+            <button type="button" className="btn btn-warning">Delete Comment</button>
+            <button type="button" className="btn btn-danger">Delete Location</button>
+          </div>
+        </div>
+      </div>
+    </div>;
+  }
+
+  updateRestNameAddress(event) {
+    this.setState({ restName: event.target.getAttribute('restName').replaceAll('_', ' '), restAddress: event.target.getAttribute('restAddress').replaceAll('_', ' ') }, this.renderEntryCard);
   }
 
   renderPage() {
@@ -45,14 +71,14 @@ export default class App extends React.Component {
           </div>
           <div className="row mt-lg-3">
             <Wrapper apiKey={process.env.GOOGLE_MAPS_API_KEY} render={render} libraries={['places']} >
-              <Map />
+              <Map onUpdateNameAdd={this.updateRestNameAddress}/>
             </Wrapper>
           </div>
         </div>
       );
     }
     if (route.path === 'favorites') {
-      return <FavoritesView />;
+      return <FavoritesView restName={this.state.restName} restAddress={this.state.restAddress} createCard={this.updateRestNameAddress} />;
     }
   }
 
