@@ -14,10 +14,12 @@ export default class App extends React.Component {
     this.state = {
       restName: '',
       restAddress: '',
+      googlePlaceId: '',
+      entries: [],
       route: parseRoute(window.location.hash)
     };
     this.updateRestNameAddress = this.updateRestNameAddress.bind(this);
-    this.renderEntryCard = this.renderEntryCard.bind(this);
+    this.renderEntry = this.renderEntry.bind(this);
   }
 
   componentDidMount() {
@@ -26,26 +28,31 @@ export default class App extends React.Component {
     });
   }
 
-  renderEntryCard() {
-    <div className="card">
-      <div className="card-body">
-        <h5 className="card-title" >{this.state.restName}</h5>
-        <p className="card-text" >{this.state.restAddress}</p>
-        <p className="card-text">make this a bullet-pointed comment</p>
-        <div className="row">
-          <div className="d-flex justify-content-around">
-            <button type="button" className="btn btn-primary">Add Comment</button>
-            <button type="button" className="btn btn-secondary">Edit Comment</button>
-            <button type="button" className="btn btn-warning">Delete Comment</button>
-            <button type="button" className="btn btn-danger">Delete Location</button>
-          </div>
-        </div>
-      </div>
-    </div>;
+  updateRestNameAddress(event) {
+    this.setState({
+      restName: event.target.getAttribute('restName').replaceAll('_', ' '),
+      restAddress: event.target.getAttribute('restAddress').replaceAll('_', ' '),
+      googlePlaceId: event.target.getAttribute('googlePlaceId')
+    }, this.renderEntry);
   }
 
-  updateRestNameAddress(event) {
-    this.setState({ restName: event.target.getAttribute('restName').replaceAll('_', ' '), restAddress: event.target.getAttribute('restAddress').replaceAll('_', ' ') }, this.renderEntryCard);
+  renderEntry() {
+    const entry = <div className="card mb-4" key={this.state.googlePlaceId}>
+                    <div className="card-body">
+                      <h5 className="card-title" >{this.state.restName}</h5>
+                      <p className="card-text" >{this.state.restAddress}</p>
+                      <p className="card-text">make this a bullet-pointed comment</p>
+                      <div className="row">
+                        <div className="d-flex justify-content-around">
+                          <button type="button" className="btn btn-primary">Add Comment</button>
+                          <button type="button" className="btn btn-secondary">Edit Comment</button>
+                          <button type="button" className="btn btn-warning">Delete Comment</button>
+                          <button type="button" className="btn btn-danger">Delete Location</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>;
+    this.setState({ entries: [...this.state.entries, entry] });
   }
 
   renderPage() {
@@ -78,7 +85,7 @@ export default class App extends React.Component {
       );
     }
     if (route.path === 'favorites') {
-      return <FavoritesView restName={this.state.restName} restAddress={this.state.restAddress} createCard={this.updateRestNameAddress} />;
+      return <FavoritesView restName={this.state.restName} restAddress={this.state.restAddress} createCards={this.state.entries} />;
     }
   }
 

@@ -154,7 +154,7 @@ class Map extends React.Component {
         `<div class="info-window-header"><h6 class="info-header-text">${marker.restName}</h6></div>` + '<hr class="horizontal-line">' +
         `<div class="address-div"><p class="address-text">Address:&nbsp&nbsp${marker.restAddress}</p></div>` +
         `<div class="rating-div"><p class="rating-text">Rating: ${marker.restRating}&nbspout of 5&nbsp&nbsp&nbsp(Number of ratings: ${marker.restTotalRatings})</p></div>` +
-        `<div class="add-fav-button-div"><button id="addFav" restName=${marker.restName.replaceAll(' ', '_')} restAddress=${marker.restAddress.replaceAll(' ', '_')}
+        `<div class="add-fav-button-div"><button id="addFav" restName=${marker.restName.replaceAll(' ', '_')} restAddress=${marker.restAddress.replaceAll(' ', '_')} googlePlaceId=${marker.placeId}
         class="add-fav-button">Add to Favorites</button></div>`;
       const infoWindow = new window.google.maps.InfoWindow({
         content: contentString
@@ -173,7 +173,6 @@ class Map extends React.Component {
         infoWindow.close();
       });
     });
-
   }
 
   prepEntryBox(event) {
@@ -227,6 +226,7 @@ class Map extends React.Component {
               <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)}>Pizza Hut</a></li>
               <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)}>Krispy Kreme</a></li>
               <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)}>Dunkin&apos;</a></li>
+              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)}>Wingstop</a></li>
             </ul>
           </div>
           <div className="searchbox-div col d-flex justify-content-end">
