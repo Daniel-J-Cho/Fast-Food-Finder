@@ -15,7 +15,6 @@ export default class App extends React.Component {
       restName: '',
       restAddress: '',
       googlePlaceId: '',
-      entries: [],
       route: parseRoute(window.location.hash)
     };
     this.updateRestNameAddress = this.updateRestNameAddress.bind(this);
@@ -50,23 +49,6 @@ export default class App extends React.Component {
     })
       .then(res => res.json())
       .catch(err => console.error(err));
-    const entry = <div className="card mb-4" key={this.state.googlePlaceId}>
-                    <div className="card-header">
-                      <h3>{this.state.restName}</h3>
-                    </div>
-                    <div className="card-body">
-                      <p className="card-text" >{this.state.restAddress}</p>
-                      <div className="row">
-                        <div className="d-flex justify-content-around">
-                          <button type="button" className="btn btn-primary">Add Comment</button>
-                          <button type="button" className="btn btn-secondary">Edit Comment</button>
-                          <button type="button" className="btn btn-warning">Delete Comment</button>
-                          <button type="button" className="btn btn-danger">Delete Location</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>;
-    this.setState({ entries: [...this.state.entries, entry] });
   }
 
   renderPage() {
@@ -99,7 +81,7 @@ export default class App extends React.Component {
       );
     }
     if (route.path === 'favorites') {
-      return <FavoritesView restName={this.state.restName} restAddress={this.state.restAddress} createCards={this.state.entries} />;
+      return <FavoritesView />;
     }
   }
 

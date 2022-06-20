@@ -36,6 +36,19 @@ app.get('/api/locations', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.get('/api/restLocs', (req, res, next) => {
+  const sql = `
+    select *
+      from "locations"
+     order by "locationId"
+  `;
+  db.query(sql)
+    .then(result => {
+      res.json(result.rows);
+    })
+    .catch(err => next(err));
+});
+
 app.post('/api/restLocs', (req, res) => {
   const { restName, restAddress, googlePlaceId } = req.body;
   if (!restName || !restAddress || !googlePlaceId) {
