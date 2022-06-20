@@ -10,6 +10,7 @@ create schema "public";
 	"locationId" serial NOT NULL,
 	"restaurantName" TEXT NOT NULL,
 	"address" TEXT NOT NULL,
+  "googlePlaceId" TEXT NOT NULL,
 	CONSTRAINT "locations_pk" PRIMARY KEY ("locationId")
 ) WITH (
   OIDS=FALSE

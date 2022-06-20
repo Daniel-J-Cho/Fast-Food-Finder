@@ -37,11 +37,25 @@ export default class App extends React.Component {
   }
 
   renderEntry() {
+    fetch('/api/restLocs', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        restName: this.state.restName,
+        restAddress: this.state.restAddress,
+        googlePlaceId: this.state.googlePlaceId
+      })
+    })
+      .then(res => res.json())
+      .catch(err => console.error(err));
     const entry = <div className="card mb-4" key={this.state.googlePlaceId}>
+                    <div className="card-header">
+                      <h3>{this.state.restName}</h3>
+                    </div>
                     <div className="card-body">
-                      <h5 className="card-title" >{this.state.restName}</h5>
                       <p className="card-text" >{this.state.restAddress}</p>
-                      <p className="card-text">make this a bullet-pointed comment</p>
                       <div className="row">
                         <div className="d-flex justify-content-around">
                           <button type="button" className="btn btn-primary">Add Comment</button>
