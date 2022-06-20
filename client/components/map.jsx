@@ -12,6 +12,7 @@ class Map extends React.Component {
     };
     this.map = null;
     this.marker = null;
+    this.markerForSearchBox = null;
     this.searchBox = null;
     this.mapDivRef = React.createRef();
     this.searchBoxRef = React.createRef();
@@ -24,6 +25,7 @@ class Map extends React.Component {
     this.initSearchBox = this.initSearchBox.bind(this);
     this.onPlaceChanged = this.onPlaceChanged.bind(this);
     this.searchBoxMarker = this.searchBoxMarker.bind(this);
+    this.prepEntryBox = this.prepEntryBox.bind(this);
   }
 
   clearMarkers() {
@@ -55,6 +57,9 @@ class Map extends React.Component {
         this.marker.setMap(this.map);
       }
     });
+    if (this.markerForSearchBox) {
+      this.markerForSearchBox.setMap(null);
+    }
     this.clearMarkers();
   }
 
@@ -65,7 +70,9 @@ class Map extends React.Component {
       this.setState({ coords: { latitude: this.map.getCenter().lat(), longitude: this.map.getCenter().lng() } });
       if (this.state.franchiseName) {
         this.clearMarkers();
-        this.marker.setMap(null);
+        if (this.marker) {
+          this.marker.setMap(null);
+        }
       }
     }
     this.setState({ franchiseName: ffName }, this.handleLocationSearch);
@@ -107,7 +114,7 @@ class Map extends React.Component {
 
   searchBoxMarker() {
     this.map.setCenter({ lat: this.state.coords.latitude(), lng: this.state.coords.longitude() });
-    this.marker = new window.google.maps.Marker({
+    this.markerForSearchBox = new window.google.maps.Marker({
       position: { lat: this.state.coords.latitude(), lng: this.state.coords.longitude() },
       map: this.map
     });
@@ -147,7 +154,8 @@ class Map extends React.Component {
         `<div class="info-window-header"><h6 class="info-header-text">${marker.restName}</h6></div>` + '<hr class="horizontal-line">' +
         `<div class="address-div"><p class="address-text">Address:&nbsp&nbsp${marker.restAddress}</p></div>` +
         `<div class="rating-div"><p class="rating-text">Rating: ${marker.restRating}&nbspout of 5&nbsp&nbsp&nbsp(Number of ratings: ${marker.restTotalRatings})</p></div>` +
-        '<div class="add-fav-button-div"><button type=button class="add-fav-button">Add to Favorites</button></div>';
+        `<div class="add-fav-button-div"><button id="addFav" restName=${marker.restName.replaceAll(' ', '_')} restAddress=${marker.restAddress.replaceAll(' ', '_')} googlePlaceId=${marker.placeId}
+        class="add-fav-button">Add to Favorites</button></div>`;
       const infoWindow = new window.google.maps.InfoWindow({
         content: contentString
       });
@@ -165,7 +173,12 @@ class Map extends React.Component {
         infoWindow.close();
       });
     });
+  }
 
+  prepEntryBox(event) {
+    if (event.target.id === 'addFav') {
+      this.props.onUpdateNameAdd(event);
+    }
   }
 
   render() {
@@ -213,13 +226,14 @@ class Map extends React.Component {
               <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)}>Pizza Hut</a></li>
               <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)}>Krispy Kreme</a></li>
               <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)}>Dunkin&apos;</a></li>
+              <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)}>Wingstop</a></li>
             </ul>
           </div>
           <div className="searchbox-div col d-flex justify-content-end">
-            <input ref={this.searchBoxRef} id="searchbox" placeholder="Enter an address" type="text" />
+            <input ref={this.searchBoxRef} id="searchbox" className="searchbox" placeholder="Enter an address" type="text" />
           </div>
         </div>
-        <div ref={this.mapDivRef} style={{ height: '73vh', width: '81vw', margin: 'auto' }} />
+        <div ref={this.mapDivRef} className="map-div" style={{ height: '73vh', width: '81vw', margin: 'auto' }} onClick={event => this.prepEntryBox(event)} />
       </div>
     );
   }

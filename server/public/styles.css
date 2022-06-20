@@ -7,26 +7,50 @@ body {
   justify-content: center;
 }
 
+.add-fav-button {
+  display: flex;
+  color: white;
+  background-color: #fd7e14;
+  border-radius: 4px;
+  border: none;
+  height: 30px;
+  width: 120px;
+  justify-content: center;
+  align-items: center;
+}
+
 .address-div {
   margin: 0 5px;
-  font-weight: 500;
+  font-weight: 450;
 }
 
 .address-text,
 .rating-text {
-  color: rgb(94, 6, 6);
+  color: rgb(18, 6, 94);
 }
 
-.add-fav-button {
-  background-color: #fd7e14;
-  color: white;
-  border-radius: 4px;
-  border: none;
-  height: 30px;
+.card {
+  padding: 0;
 }
 
-#searchbox {
+.card-header {
+  padding-left: 20px;
+  color: rgb(2, 99, 2);
+}
+
+.card-text {
+  padding: 10px 5px;
+}
+
+.map-div {
+  border: 2px solid rgb(0, 253, 42);
+  border-radius: 10px;
+}
+
+.searchbox {
   width: 1050px;
+  border-radius: 3px;
+  border: none;
 }
 
 .horizontal-line {
@@ -46,7 +70,7 @@ body {
 }
 
 .header-text-two {
-  text-shadow: 3px 2px 2px rgb(255, 89, 0);
+  text-shadow: 3px 2px 2px rgb(255, 47, 0);
 }
 
 .header-text-three {
@@ -68,13 +92,13 @@ body {
 }
 
 .info-header-text {
-  color: darkslategrey;
-  text-shadow: 2px 2px 2px rgba(255, 196, 0, 0.835);
+  color: rgb(49, 58, 232);
+  text-shadow: 1.5px 1px 5px rgb(255, 102, 0);
 }
 
 .rating-div {
   margin: 0 5px;
-  font-weight: 500;
+  font-weight: 450;
 }
 
 .search-button {
@@ -82,13 +106,17 @@ body {
 }
 
 @media (max-width: 1400px) {
-  #searchbox {
+  .searchbox {
     width: 755px;
   }
 }
 
 @media (max-width: 575px) {
-  #searchbox {
+  .btn {
+    font-size: 12px;
+  }
+
+  .searchbox {
     margin-top: 12px;
     width: 400px;
   }
@@ -108,13 +136,17 @@ body {
 }
 
 @media (max-width: 767px) {
-  #searchbox {
+  .btn {
+    font-size: 12px;
+  }
+
+  .searchbox {
     margin-top: 10px;
   }
 }
 
 @media (max-width: 991px) {
-  #searchbox {
+  .searchbox {
     margin-top: 10px;
   }
 }
