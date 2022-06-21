@@ -184,7 +184,7 @@ class Map extends React.Component {
   render() {
     return (
       <div>
-        <div className="modal" id="permModal" tabIndex="-1" aria-labelledby="permModalLabel" aria-hidden="true">
+        <div className="modal fade" id="permModal" tabIndex="-1" aria-labelledby="permModalLabel" aria-hidden="true">
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">
