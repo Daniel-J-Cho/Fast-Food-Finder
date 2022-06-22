@@ -76,6 +76,35 @@ app.post('/api/restLocs', (req, res) => {
     });
 });
 
+app.delete('/api/favorites/:locationId', (req, res, next) => {
+  const locationId = Number(req.params.locationId);
+  if (!Number.isInteger(locationId) || locationId <= 0) {
+    res.status(400).json({
+      error: '\'locationId\' must be a positive integer'
+    });
+    return;
+  }
+
+  const text = 'DELETE FROM locations WHERE "locationId"=$1 RETURNING *';
+  const params = [locationId];
+
+  db.query(text, params)
+    .then(result => {
+      const locId = result.rows[0];
+      if (!locId) {
+        res.status(404).json({
+          error: `Cannot find 'locationId' ${locationId}`
+        });
+      } else {
+        res.status(204).json();
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      return res.status(500).json({ error: 'An unexpected error occurred.' });
+    });
+});
+
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {
