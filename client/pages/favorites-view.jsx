@@ -10,7 +10,6 @@ class FavoritesView extends React.Component {
     };
     this.setToDelete = this.setToDelete.bind(this);
     this.deleteEntry = this.deleteEntry.bind(this);
-    this.refreshAfterDelete = this.refreshAfterDelete.bind(this);
   }
 
   componentDidMount() {
@@ -28,16 +27,13 @@ class FavoritesView extends React.Component {
     fetch(`/api/favorites/${this.state.toDeleteId}`, {
       method: 'DELETE'
     })
-      .then(res => this.setToDelete(null))
+      .then(() => {
+        const filteredEntries = this.state.entries.filter(entry => {
+          return entry.locationId !== this.state.toDeleteId;
+        });
+        this.setState({ entries: filteredEntries, toDeleteId: null });
+      })
       .catch(err => console.error(err));
-    this.refreshAfterDelete();
-  }
-
-  refreshAfterDelete() {
-    fetch('/api/restLocs')
-      .then(res => res.json())
-      .then(data => this.setState({ entries: data }))
-      .catch(err => console.error('error:', err));
   }
 
   render() {
