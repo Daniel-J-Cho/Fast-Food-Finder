@@ -37,14 +37,31 @@ class FavoritesView extends React.Component {
   }
 
   render() {
-
+    // console.log('this.state.entries:', this.state.entries);
     return (
       <div className="container">
+        <div className="modal fade" id="addCommentModal" tabIndex="-1" aria-labelledby="addCommentModalLabel" aria-hidden="true">
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="addCommentModalLabel">Add Comment</h5>
+                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Cancel"></button>
+              </div>
+              <div className="modal-body">
+                <p>Address for this location goes here</p>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" className="btn btn-primary" data-bs-dismiss="modal">Add Comment</button>
+              </div>
+            </div>
+          </div>
+        </div>
         <div className="modal fade" id="deleteLocationModal" tabIndex="-1" aria-labelledby="delLocModalLabel" aria-hidden="true">
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title" id="delLocModalLabel">Delete?</h5>
+                <h5 className="modal-title" id="delLocModalLabel">Delete this location</h5>
                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Cancel"></button>
               </div>
               <div className="modal-body">
@@ -73,7 +90,7 @@ class FavoritesView extends React.Component {
                   <p className="card-text" >{entry.address}</p>
                   <div className="row">
                     <div className="d-flex justify-content-around">
-                      <button type="button" className="btn btn-primary">Add Comment</button>
+                      <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCommentModal">Add Comment</button>
                       <button type="button" className="btn btn-secondary">Edit Comment</button>
                       <button type="button" className="btn btn-warning">Delete Comment</button>
                       <button type="button" onClick={() => this.setToDelete(entry.locationId)} className="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteLocationModal">Delete Location</button>
