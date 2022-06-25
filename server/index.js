@@ -105,6 +105,34 @@ app.delete('/api/favorites/:locationId', (req, res, next) => {
     });
 });
 
+app.post('/api/comments/:locationId', (req, res, next) => {
+  const locationId = Number(req.params.locationId);
+  const { comment } = req.body;
+  if (!Number.isInteger(locationId) || locationId <= 0) {
+    res.status(400).json({
+      error: '\'locationId\' must be a positive integer'
+    });
+    return;
+  }
+
+  const sql = `
+    insert into "comments" ("comment")
+    values ($1)
+    where "locationId" = ($2)
+    returning *
+  `;
+  const params = [comment, locationId];
+  db.query(sql, params)
+    .then(result => {
+      const commentData = result.rows;
+      res.status(201).json(commentData);
+    })
+    .catch(err => {
+      console.error(err);
+      return res.status(500).json({ error: 'An unexpected error occurred.' });
+    });
+});
+
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {
