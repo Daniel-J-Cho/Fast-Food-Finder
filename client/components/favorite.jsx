@@ -6,27 +6,24 @@ class Favorite extends React.Component {
     this.state = {
       comments: [],
       restAddress: '',
-      restName: ''
+      restName: '',
+      addCommentId: null
     };
     this.prepSetToDelete = this.prepSetToDelete.bind(this);
-    this.prepAddComment = this.prepAddComment.bind(this);
-    // this.setAddCommentIdAddress = this.setAddCommentIdAddress.bind(this);
+    this.setAddCommentIdAddress = this.setAddCommentIdAddress.bind(this);
     this.createComment = this.createComment.bind(this);
     this.handleCommentChange = this.handleCommentChange.bind(this);
+    this.addComment = this.addComment.bind(this);
   }
 
   prepSetToDelete(id, idTwo, idThree) {
     this.props.deleteThisBit(id, idTwo, idThree);
   }
 
-  // setAddCommentIdAddress(id, idTwo, idThree) {
-  //   this.setState({ addCommentId: id });
-  //   this.setState({ restAddress: idTwo });
-  //   this.setState({ restName: idThree });
-  // }
-
-  prepAddComment(id, idTwo, idThree) {
-    this.props.addThisBit(id, idTwo, idThree);
+  setAddCommentIdAddress(id, idTwo, idThree) {
+    this.setState({ addCommentId: id });
+    this.setState({ restAddress: idTwo });
+    this.setState({ restName: idThree });
   }
 
   createComment() {
@@ -42,12 +39,27 @@ class Favorite extends React.Component {
     // console.log('this.state.comments:', this.state.comments);
   }
 
+  addComment() {
+    fetch(`/api/comments/${this.state.addCommentId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        comments: this.state.comments
+      })
+    })
+      .then(res => res.json())
+      .catch(err => console.error(err));
+  }
+
   render() {
     // console.log('this.state.comments:', this.state.comments);
     // console.log('this.state.restName:', this.state.restName);
+    // console.log('this.state.addCommentId:', this.state.addCommentId);
     return (
       <div className="container">
-        <div className="modal fade" id="addCommentModal" tabIndex="-1" aria-labelledby="addCommentModalLabel" aria-hidden="true">
+        <div className="modal fade" id={`addCommentModal-${this.props.propKey}`} tabIndex="-1" aria-labelledby="addCommentModalLabel" aria-hidden="true">
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">
@@ -64,8 +76,8 @@ class Favorite extends React.Component {
               </div>
               <div className="modal-footer d-flex justify-content-evenly">
                 <button type="button" className="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" onClick={event => this.createComment(event)} className="btn btn-secondary">Add another comment</button>
-                <button type="button" onClick={event => this.addComment(event)} className="btn btn-primary" data-bs-dismiss="modal">Confirm</button>
+                <button type="button" onClick={event => this.createComment(event)} className="btn btn-secondary">Add comment</button>
+                <button type="button" onClick={this.addComment} className="btn btn-primary" data-bs-dismiss="modal">Confirm</button>
               </div>
             </div>
           </div>
@@ -78,7 +90,7 @@ class Favorite extends React.Component {
             <p className="card-text" >{this.props.restAddress}</p>
             <div className="row">
               <div className="d-flex justify-content-around">
-                <button type="button" onClick={() => this.prepAddComment(this.props.propKey, this.props.restAddress, this.props.restName)} className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCommentModal">Add Comment</button>
+                <button type="button" onClick={() => this.setAddCommentIdAddress(this.props.propKey, this.props.restAddress, this.props.restName)} className="btn btn-primary" data-bs-toggle="modal" data-bs-target={`#addCommentModal-${this.props.propKey}`}>Add Comment</button>
                 <button type="button" className="btn btn-secondary">Edit Comment</button>
                 <button type="button" className="btn btn-warning">Delete Comment</button>
                 <button type="button" onClick={() => this.prepSetToDelete(this.props.propKey, this.props.restAddress, this.props.restName)} className="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteLocationModal">Delete Location</button>
