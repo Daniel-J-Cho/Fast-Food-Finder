@@ -107,7 +107,7 @@ app.delete('/api/favorites/:locationId', (req, res, next) => {
 
 app.post('/api/comments/:locationId', (req, res, next) => {
   const locationId = Number(req.params.locationId);
-  const [...comment] = req.body;
+  const { ...comments } = req.body.comments;
   if (!Number.isInteger(locationId) || locationId <= 0) {
     res.status(400).json({
       error: '\'locationId\' must be a positive integer'
@@ -116,12 +116,11 @@ app.post('/api/comments/:locationId', (req, res, next) => {
   }
 
   const sql = `
-    insert into "comments" ("comment", "locationId")
-    values ($1, $2)
-    where "locationId" = ($2)
+    insert into "comments" ("comment", "locationId", "createdAt")
+    values ($1, $2, now())
     returning *
   `;
-  const params = [comment, locationId];
+  const params = [comments, locationId];
   db.query(sql, params)
     .then(result => {
       const commentData = result.rows[0];
