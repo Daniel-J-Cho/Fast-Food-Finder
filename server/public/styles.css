@@ -42,6 +42,15 @@ body {
   padding: 10px 5px;
 }
 
+.comment-input {
+  width: 90%;
+  margin-left: 10px;
+}
+
+.confirm-button {
+  margin-left: 10px;
+}
+
 .map-div {
   border: 2px solid rgb(0, 253, 42);
   border-radius: 10px;

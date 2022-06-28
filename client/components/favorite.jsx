@@ -36,17 +36,16 @@ class Favorite extends React.Component {
     comment = event.target.value;
     comments[index] = comment;
     this.setState({ comments });
-    // console.log('this.state.comments:', this.state.comments);
   }
 
-  addComment() {
+  addComment(index) {
     fetch(`/api/comments/${this.state.addCommentId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        comments: this.state.comments
+        comment: this.state.comments[index]
       })
     })
       .then(res => res.json())
@@ -54,9 +53,6 @@ class Favorite extends React.Component {
   }
 
   render() {
-    // console.log('this.state.comments:', this.state.comments);
-    // console.log('this.state.restName:', this.state.restName);
-    // console.log('this.state.addCommentId:', this.state.addCommentId);
     return (
       <div className="container">
         <div className="modal fade" id={`addCommentModal-${this.props.propKey}`} tabIndex="-1" aria-labelledby="addCommentModalLabel" aria-hidden="true">
@@ -70,14 +66,17 @@ class Favorite extends React.Component {
                 <p><b>Address:</b> {this.state.restAddress}</p>
                 <div className="comments">
                   {this.state.comments.map((comment, index) => {
-                    return <div key={index}><input value={comment} onChange={event => this.handleCommentChange(event, index)} /><br></br><br></br></div>;
+                    return (
+                    <div key={index}><input value={comment} key={index} className="comment-input" onChange={event => this.handleCommentChange(event, index)} /><br></br><br></br>
+                    <button type="submit" onClick={() => this.addComment(index)} id="confirmButton" className="btn btn-primary confirm-button" data-bs-dismiss="modal">Confirm</button><br></br><br></br>
+                    </div>
+                    );
                   })}
                 </div>
               </div>
               <div className="modal-footer d-flex justify-content-evenly">
                 <button type="button" className="btn btn-light" data-bs-dismiss="modal">Cancel</button>
                 <button type="button" onClick={event => this.createComment(event)} className="btn btn-secondary">Add comment</button>
-                <button type="button" onClick={this.addComment} className="btn btn-primary" data-bs-dismiss="modal">Confirm</button>
               </div>
             </div>
           </div>
