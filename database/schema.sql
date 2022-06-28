@@ -21,7 +21,7 @@ create schema "public";
 CREATE TABLE "public"."comments" (
 	"commentId" serial NOT NULL,
 	"comment" TEXT NOT NULL,
-	"entryId" integer NOT NULL,
+	"locationId" integer NOT NULL,
 	"createdAt" timestamptz NOT NULL,
 	CONSTRAINT "comments_pk" PRIMARY KEY ("commentId")
 ) WITH (
@@ -30,19 +30,5 @@ CREATE TABLE "public"."comments" (
 
 
 
-CREATE TABLE "public"."favoriteEntries" (
-	"entryId" serial NOT NULL,
-	"locationId" integer NOT NULL,
-	"comment" TEXT NOT NULL,
-	"createdAt" timestamptz NOT NULL,
-	CONSTRAINT "favoriteEntries_pk" PRIMARY KEY ("entryId")
-) WITH (
-  OIDS=FALSE
-);
 
-
-
-
-ALTER TABLE "comments" ADD CONSTRAINT "comments_fk0" FOREIGN KEY ("entryId") REFERENCES "favoriteEntries"("entryId");
-
-ALTER TABLE "favoriteEntries" ADD CONSTRAINT "favoriteEntries_fk0" FOREIGN KEY ("locationId") REFERENCES "locations"("locationId");
+ALTER TABLE "comments" ADD CONSTRAINT "comments_fk0" FOREIGN KEY ("locationId") REFERENCES "locations"("locationId");
