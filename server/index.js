@@ -132,6 +132,57 @@ app.post('/api/comments/:locationId', (req, res, next) => {
     });
 });
 
+app.get('/api/comments/:locationId', (req, res, next) => {
+  const locationId = Number(req.params.locationId);
+  if (!Number.isInteger(locationId) || locationId <= 0) {
+    res.status(400).json({
+      error: '\'locationId\' must be a positive integer'
+    });
+    return;
+  }
+  const sql = `
+    select *
+      from comments
+    where "locationId" = ($1)
+    order by "commentId"
+  `;
+  const params = [locationId];
+
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows);
+    })
+    .catch(err => next(err));
+});
+
+app.delete('/api/comments/:commentId', (req, res, next) => {
+  const commentId = Number(req.params.commentId);
+  if (!Number.isInteger(commentId) || commentId <= 0) {
+    res.status(400).json({
+      error: '\'commentId\' must be a positive integer'
+    });
+    return;
+  }
+  const text = 'DELETE FROM comments WHERE "commentId"=$1 RETURNING *';
+  const params = [commentId];
+
+  db.query(text, params)
+    .then(result => {
+      const comId = result.rows[0];
+      if (!comId) {
+        res.status(404).json({
+          error: `Cannot find 'commentId' ${commentId}`
+        });
+      } else {
+        res.status(204).json();
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      return res.status(500).json({ error: 'An unexpected error occurred.' });
+    });
+});
+
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {

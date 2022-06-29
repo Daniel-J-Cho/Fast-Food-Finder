@@ -7,13 +7,22 @@ class Favorite extends React.Component {
       comments: [],
       restAddress: '',
       restName: '',
-      addCommentId: null
+      addCommentId: null,
+      displayComments: []
     };
     this.prepSetToDelete = this.prepSetToDelete.bind(this);
     this.setAddCommentIdAddress = this.setAddCommentIdAddress.bind(this);
     this.createComment = this.createComment.bind(this);
     this.handleCommentChange = this.handleCommentChange.bind(this);
     this.addComment = this.addComment.bind(this);
+    this.displayComments = this.displayComments.bind(this);
+  }
+
+  componentDidMount() {
+    fetch(`/api/comments/${this.props.propKey}`)
+      .then(res => res.ok ? res.json() : Promise.reject(new Error('Something went wrong')))
+      .then(data => this.setState({ displayComments: data }))
+      .catch(err => console.error('error:', err));
   }
 
   prepSetToDelete(id, idTwo, idThree) {
@@ -49,7 +58,17 @@ class Favorite extends React.Component {
       })
     })
       .then(res => res.json())
+      .then(() => {
+        this.displayComments();
+      })
       .catch(err => console.error(err));
+  }
+
+  displayComments() {
+    fetch(`/api/comments/${this.state.addCommentId}`)
+      .then(res => res.json())
+      .then(data => this.setState({ displayComments: data }))
+      .catch(err => console.error('error:', err));
   }
 
   render() {
@@ -86,13 +105,18 @@ class Favorite extends React.Component {
             <h3>{this.props.restName}</h3>
           </div>
           <div className="card-body">
-            <p className="card-text" >{this.props.restAddress}</p>
-            <div className="row">
+            <p className="card-text" ><b>Address:</b> {this.props.restAddress}</p>
+            {this.state.displayComments.map((comment, index) => {
+              return (
+                <div key={index}><p className="card-text">•&nbsp;{comment.comment}</p></div>
+              );
+            })}
+            <div className="row mt-3">
               <div className="d-flex justify-content-around">
-                <button type="button" onClick={() => this.setAddCommentIdAddress(this.props.propKey, this.props.restAddress, this.props.restName)} className="btn btn-primary" data-bs-toggle="modal" data-bs-target={`#addCommentModal-${this.props.propKey}`}>Add Comment</button>
-                <button type="button" className="btn btn-secondary">Edit Comment</button>
-                <button type="button" className="btn btn-warning">Delete Comment</button>
-                <button type="button" onClick={() => this.prepSetToDelete(this.props.propKey, this.props.restAddress, this.props.restName)} className="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteLocationModal">Delete Location</button>
+                <button type="button" onClick={() => this.setAddCommentIdAddress(this.props.propKey, this.props.restAddress, this.props.restName)} className="btn btn-primary entry-btn" data-bs-toggle="modal" data-bs-target={`#addCommentModal-${this.props.propKey}`}>Add Comment</button>
+                <button type="button" className="btn btn-secondary entry-btn">Edit Comment</button>
+                <button type="button" className="btn btn-warning entry-btn">Delete Comment</button>
+                <button type="button" onClick={() => this.prepSetToDelete(this.props.propKey, this.props.restAddress, this.props.restName)} className="btn btn-danger entry-btn" data-bs-toggle="modal" data-bs-target="#deleteLocationModal">Delete Location</button>
               </div>
             </div>
           </div>

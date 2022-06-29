@@ -42,8 +42,6 @@ class FavoritesView extends React.Component {
   }
 
   render() {
-    // console.log('this.state.toDeleteId:', this.state.toDeleteId);
-    // console.log('this.state.restName:', this.state.restName);
     return (
       <div className="container">
         <div className="modal fade" id="deleteLocationModal" tabIndex="-1" aria-labelledby="delLocModalLabel" aria-hidden="true">
