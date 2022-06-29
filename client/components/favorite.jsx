@@ -58,7 +58,9 @@ class Favorite extends React.Component {
       })
     })
       .then(res => res.json())
-      .then(this.displayComments())
+      .then(() => {
+        this.displayComments();
+      })
       .catch(err => console.error(err));
   }
 
@@ -111,10 +113,10 @@ class Favorite extends React.Component {
             })}
             <div className="row mt-3">
               <div className="d-flex justify-content-around">
-                <button type="button" onClick={() => this.setAddCommentIdAddress(this.props.propKey, this.props.restAddress, this.props.restName)} className="btn btn-primary" data-bs-toggle="modal" data-bs-target={`#addCommentModal-${this.props.propKey}`}>Add Comment</button>
-                <button type="button" className="btn btn-secondary">Edit Comment</button>
-                <button type="button" className="btn btn-warning">Delete Comment</button>
-                <button type="button" onClick={() => this.prepSetToDelete(this.props.propKey, this.props.restAddress, this.props.restName)} className="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteLocationModal">Delete Location</button>
+                <button type="button" onClick={() => this.setAddCommentIdAddress(this.props.propKey, this.props.restAddress, this.props.restName)} className="btn btn-primary entry-btn" data-bs-toggle="modal" data-bs-target={`#addCommentModal-${this.props.propKey}`}>Add Comment</button>
+                <button type="button" className="btn btn-secondary entry-btn">Edit Comment</button>
+                <button type="button" className="btn btn-warning entry-btn">Delete Comment</button>
+                <button type="button" onClick={() => this.prepSetToDelete(this.props.propKey, this.props.restAddress, this.props.restName)} className="btn btn-danger entry-btn" data-bs-toggle="modal" data-bs-target="#deleteLocationModal">Delete Location</button>
               </div>
             </div>
           </div>
