@@ -8,9 +8,8 @@ class Favorite extends React.Component {
       restAddress: '',
       restName: '',
       addCommentId: null,
+      editCommentId: null,
       displayComments: [],
-      editedComment: '',
-      toBeEdited: [],
       commentId: null
     };
     this.prepSetToDelete = this.prepSetToDelete.bind(this);
@@ -20,12 +19,14 @@ class Favorite extends React.Component {
     this.handleCommentEdit = this.handleCommentEdit.bind(this);
     this.addComment = this.addComment.bind(this);
     this.displayComments = this.displayComments.bind(this);
+    this.editComment = this.editComment.bind(this);
+    this.displayEditedComments = this.displayEditedComments.bind(this);
   }
 
   componentDidMount() {
     fetch(`/api/comments/${this.props.propKey}`)
       .then(res => res.ok ? res.json() : Promise.reject(new Error('Something went wrong')))
-      .then(data => this.setState({ displayComments: data, toBeEdited: data }))
+      .then(data => this.setState({ displayComments: data }))
       .catch(err => console.error('error:', err));
   }
 
@@ -34,9 +35,7 @@ class Favorite extends React.Component {
   }
 
   setAddCommentIdAddress(id, idTwo, idThree) {
-    this.setState({ addCommentId: id });
-    this.setState({ restAddress: idTwo });
-    this.setState({ restName: idThree });
+    this.setState({ addCommentId: id, editCommentId: id, restAddress: idTwo, restName: idThree });
   }
 
   createComment() {
@@ -51,12 +50,10 @@ class Favorite extends React.Component {
     this.setState({ comments });
   }
 
-  handleCommentEdit(event, index) {
-    const editedComments = [...this.state.toBeEdited];
-    let editedCommentAtIndex = { ...editedComments[index] };
-    editedCommentAtIndex = event.target.value;
-    editedComments[index] = editedCommentAtIndex;
-    this.setState({ toBeEdited: editedComments });
+  handleCommentEdit(event, index, id) {
+    const editedComments = [...this.state.displayComments];
+    editedComments[index].comment = event.target.value;
+    this.setState({ displayComments: editedComments, commentId: id });
   }
 
   addComment(index) {
@@ -76,8 +73,32 @@ class Favorite extends React.Component {
       .catch(err => console.error(err));
   }
 
+  editComment(index) {
+    fetch(`/api/comments/${this.state.commentId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        editedComment: this.state.displayComments[index].comment
+      })
+    })
+      .then(res => res.json())
+      .then(() => {
+        this.displayEditedComments();
+      })
+      .catch(err => console.error(err));
+  }
+
   displayComments() {
     fetch(`/api/comments/${this.state.addCommentId}`)
+      .then(res => res.json())
+      .then(data => this.setState({ displayComments: data }))
+      .catch(err => console.error('error:', err));
+  }
+
+  displayEditedComments() {
+    fetch(`/api/comments/${this.state.editCommentId}`)
       .then(res => res.json())
       .then(data => this.setState({ displayComments: data }))
       .catch(err => console.error('error:', err));
@@ -122,10 +143,11 @@ class Favorite extends React.Component {
               <div className="modal-body">
                 <p><b>Address:</b> {this.state.restAddress}</p>
                 <div className="comments">
-                  {this.state.toBeEdited.map((comment, index) => {
+                  {this.state.displayComments.map((comment, index) => {
                     return (
-                      <div key={index}><input value={this.state.toBeEdited[index].comment} key={index} className="comment-input" onChange={event => this.handleCommentEdit(event, index)} /><br></br><br></br>
-                        <button type="submit" onClick={() => this.editComment(index)} id="confirmButton" className="btn btn-secondary confirm-button" data-bs-dismiss="modal">Confirm Edit</button><br></br><br></br>
+                      <div key={index}>
+                        <input value={this.state.displayComments[index].comment} key={index} className="comment-input" onChange={event => this.handleCommentEdit(event, index, this.state.displayComments[index].commentId)} /><br></br><br></br>
+                        <button type="submit" onClick={() => this.editComment(index, this.state.displayComments[index].commentId)} id="confirmButton" className="btn btn-secondary confirm-button" data-bs-dismiss="modal">Confirm Edit</button><br></br><br></br>
                       </div>
                     );
                   })}
