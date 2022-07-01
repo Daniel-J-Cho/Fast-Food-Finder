@@ -183,6 +183,61 @@ app.delete('/api/comments/:commentId', (req, res, next) => {
     });
 });
 
+app.put('/api/comments/:commentId', (req, res, next) => {
+  const commentId = Number(req.params.commentId);
+  if (!Number.isInteger(commentId) || commentId <= 0) {
+    res.status(400).json({
+      error: '\'commentId\' must be a positive integer'
+    });
+  } else if (!req.body.editedComment) {
+    res.status(400).json({
+      error: '\'comment\' is a required field'
+    });
+  }
+
+  const text = 'UPDATE comments SET "comment"=$1 WHERE "commentId"=$2 RETURNING *';
+  const values = [req.body.editedComment, commentId];
+
+  db.query(text, values)
+    .then(result => {
+      const id = result.rows[0];
+      if (!id) {
+        res.status(404).json({
+          error: `Cannot find comment with 'commentId' ${commentId}`
+        });
+      } else {
+        res.status(200).json(result.rows[0]);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      return res.status(500).json({ error: 'An unexpected error occurred.' });
+    });
+});
+
+app.get('/api/comments/:locationId', (req, res, next) => {
+  const locationId = Number(req.params.locationId);
+  if (!Number.isInteger(locationId) || locationId <= 0) {
+    res.status(400).json({
+      error: '\'locationId\' must be a positive integer'
+    });
+    return;
+  }
+  const sql = `
+    select *
+      from comments
+     where "locationId" = ($1)
+    order by "commentId"
+  `;
+  const params = [locationId];
+
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows);
+    })
+    .catch(err => next(err));
+});
+
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {
