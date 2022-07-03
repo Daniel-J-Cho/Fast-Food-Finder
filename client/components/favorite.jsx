@@ -192,8 +192,10 @@ class Favorite extends React.Component {
                   {this.state.displayComments.map((comment, index) => {
                     return (
                       <div key={index}>
-                        <p className="card-text">•&nbsp;{this.state.displayComments[index].comment}</p>
-                        <button type="submit" onClick={() => this.setCommentId(index, this.state.displayComments[index].commentId)} id="confirmButton" className="btn btn-danger confirm-delete-button" data-bs-dismiss="modal">Delete</button><br></br><br></br>
+                        <p className="card-text mb-1">•&nbsp;{this.state.displayComments[index].comment}</p>
+                        <div className="col d-flex justify-content-end">
+                          <button type="submit" onClick={() => this.setCommentId(index, this.state.displayComments[index].commentId)} id="confirmDeleteButton" className="btn btn-warning confirm-delete-button" data-bs-dismiss="modal">Delete Comment</button><br></br><br></br>
+                        </div>
                       </div>
                     );
                   })}

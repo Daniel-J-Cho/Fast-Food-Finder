@@ -23,9 +23,7 @@ class FavoritesView extends React.Component {
   }
 
   setToDelete(id, idTwo, idThree) {
-    this.setState({ toDeleteId: id });
-    this.setState({ restAddress: idTwo });
-    this.setState({ restName: idThree });
+    this.setState({ toDeleteId: id, restAddress: idTwo, restName: idThree });
   }
 
   deleteEntry(event) {
