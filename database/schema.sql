@@ -31,4 +31,4 @@ CREATE TABLE "public"."comments" (
 
 
 
-ALTER TABLE "comments" ADD CONSTRAINT "comments_fk0" FOREIGN KEY ("locationId") REFERENCES "locations"("locationId");
+ALTER TABLE "comments" ADD CONSTRAINT "comments_fk0" FOREIGN KEY ("locationId") REFERENCES "locations"("locationId") ON DELETE CASCADE;

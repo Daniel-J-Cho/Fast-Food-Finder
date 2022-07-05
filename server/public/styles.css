@@ -51,6 +51,11 @@ body {
   margin-left: 10px;
 }
 
+.confirm-delete-button {
+  height: 2.5rem;
+  margin-right: 20px;
+}
+
 .map-div {
   border: 2px solid rgb(0, 253, 42);
   border-radius: 10px;
