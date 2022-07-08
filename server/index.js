@@ -3,6 +3,7 @@ const path = require('path');
 const pg = require('pg');
 const express = require('express');
 const errorMiddleware = require('./error-middleware');
+const fetch = require('node-fetch');
 
 const db = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
