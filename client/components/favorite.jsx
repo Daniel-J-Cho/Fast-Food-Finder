@@ -187,7 +187,6 @@ class Favorite extends React.Component {
                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Cancel"></button>
               </div>
               <div className="modal-body">
-                <p><b>Address:</b>{this.state.restAddress}</p>
                 <div className="comments">
                   {this.state.displayComments.map((comment, index) => {
                     return (

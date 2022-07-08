@@ -136,11 +136,12 @@ body {
   }
 
   .favorites-button {
-    width: 50%;
+    width: 25%;
   }
 
   .searchbox {
     margin-top: 12px;
+    margin-right: 5px;
     width: 81vw;
   }
 
