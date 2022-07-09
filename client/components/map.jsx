@@ -1,4 +1,5 @@
 import React from 'react';
+import Spinner from './spinner';
 
 class Map extends React.Component {
   constructor(props) {
@@ -8,7 +9,9 @@ class Map extends React.Component {
       locationList: [],
       franchiseName: '',
       markers: [],
-      address: ''
+      address: '',
+      restName: 'Select a restaurant',
+      spinner: false
     };
     this.map = null;
     this.marker = null;
@@ -65,6 +68,7 @@ class Map extends React.Component {
 
   handleDropdownClick(event) {
     const ffName = event.target.textContent.replace(' ', '+');
+    this.setState({ restName: event.target.textContent, spinner: true });
     this.clearMarkers();
     if (this.state.coords.latitude !== this.map.getCenter().lat() || this.state.coords.longitude !== this.map.getCenter().lng()) {
       this.setState({ coords: { latitude: this.map.getCenter().lat(), longitude: this.map.getCenter().lng() } });
@@ -85,7 +89,7 @@ class Map extends React.Component {
     fetch(`/api/locations?query=${encodeURIComponent(query)}&location=${encodeURIComponent(location)}&radius=${radius}`)
       .then(res => res.json())
       .then(result => {
-        this.setState({ locationList: result.results }, this.placeMarkers);
+        this.setState({ locationList: result.results, spinner: false }, this.placeMarkers);
       })
       .catch(err => console.error('error:', err));
   }
@@ -204,7 +208,7 @@ class Map extends React.Component {
         <div className="row mb-md-4 mb-sm-2">
           <div className="dropdown-menu-main col-2">
             <button className="btn btn-light dropdown-toggle" type="button" id="dropdownMenu1" data-bs-toggle="dropdown" aria-expanded="false">
-              Select a restaurant
+              {this.state.restName}
             </button>
             <ul className="dropdown-menu" aria-labelledby="dropdownMenu1">
               <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)}>McDonald&apos;s</a></li>
@@ -234,6 +238,7 @@ class Map extends React.Component {
           </div>
         </div>
         <div ref={this.mapDivRef} className="map-div" style={{ height: '73vh', width: '81vw', margin: 'auto' }} onClick={event => this.prepEntryBox(event)} />
+        <Spinner spinner={this.state.spinner} />
       </div>
     );
   }
