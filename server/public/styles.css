@@ -59,6 +59,7 @@ body {
 .map-div {
   border: 2px solid rgb(0, 253, 42);
   border-radius: 10px;
+  position: relative;
 }
 
 .searchbox {
@@ -119,13 +120,13 @@ body {
   height: 37px;
 }
 
-@media (max-width: 1400px) {
-  .searchbox {
-    width: 755px;
-  }
+.spinner-border {
+  position: absolute;
+  top: 55%;
+  left: 48%;
 }
 
-@media (max-width: 575px) {
+@media only screen and (max-width: 575px) {
   .btn {
     font-size: 12px;
   }
@@ -172,5 +173,11 @@ body {
 @media (max-width: 991px) {
   .searchbox {
     margin-top: 10px;
+  }
+}
+
+@media (max-width: 1400px) {
+  .searchbox {
+    width: 755px;
   }
 }
