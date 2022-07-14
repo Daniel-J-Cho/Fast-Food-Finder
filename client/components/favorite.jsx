@@ -218,7 +218,7 @@ class Favorite extends React.Component {
                 <div key={index}><p className="card-text">•&nbsp;{comment.comment}</p></div>
               );
             })}
-            <div className="row mt-3">
+            <div className="row fav-buttons-row mt-3">
               <div className="d-flex justify-content-around">
                 <button type="button" onClick={() => this.setAddCommentIdAddress(this.props.propKey, this.props.restAddress, this.props.restName)} className="btn btn-primary entry-btn" data-bs-toggle="modal" data-bs-target={`#addCommentModal-${this.props.propKey}`}>Add Comment</button>
                 <button type="button" onClick={() => this.setAddCommentIdAddress(this.props.propKey, this.props.restAddress, this.props.restName)} className="btn btn-secondary entry-btn" data-bs-toggle="modal" data-bs-target={`#editCommentModal-${this.props.propKey}`}>Edit Comment</button>
