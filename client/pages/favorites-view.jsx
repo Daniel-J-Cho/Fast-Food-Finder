@@ -72,7 +72,7 @@ class FavoritesView extends React.Component {
                 deleteThisBit={this.setToDelete}
               />
             );
-          })};
+          })}
         </div>
       </div>
     );
