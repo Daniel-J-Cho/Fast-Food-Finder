@@ -8,8 +8,10 @@
 }
 
 .col-options-row {
+  display: flex;
   max-width: 90%;
   margin: auto;
+  justify-content: space-around;
 }
 
 .dropdown-menu-main {
