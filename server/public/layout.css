@@ -7,6 +7,11 @@
   font-size: 0.75rem;
 }
 
+.col.d-flex {
+  max-width: 90%;
+  margin: auto;
+}
+
 .dropdown-menu-main {
   padding-left: 0;
 }
