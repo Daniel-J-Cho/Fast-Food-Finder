@@ -59,12 +59,12 @@ class FavoritesView extends React.Component {
             </div>
           </div>
         </div>
-        <div className="row">
+        <div className="row home-fav-row">
           <div className="home-button d-flex align-items-center">
             <HomeButton />
           </div>
         </div>
-        <div className="row mt-4">
+        <div className="row map-row mt-4">
           {this.state.entries.map(entry => {
             return (
               <Favorite

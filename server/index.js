@@ -21,10 +21,6 @@ if (process.env.NODE_ENV === 'development') {
 
 app.use(express.static(publicPath));
 
-app.get('/api/hello', (req, res) => {
-  res.json({ hello: 'world' });
-});
-
 app.use(express.json());
 
 app.get('/api/locations', (req, res, next) => {

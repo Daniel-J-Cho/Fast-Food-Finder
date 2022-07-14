@@ -61,7 +61,7 @@ export default class App extends React.Component {
     if (route.path === '') {
       return (
         <div className="container">
-          <div className="row">
+          <div className="row home-fav-row">
             <div className="home-button d-flex align-items-center">
               <HomeButton />
             </div>
@@ -72,7 +72,7 @@ export default class App extends React.Component {
               <LocationMarker />
             </div>
           </div>
-          <div className="row mt-lg-3">
+          <div className="row map-row mt-lg-3">
             <Wrapper apiKey={process.env.GOOGLE_MAPS_API_KEY} render={render} libraries={['places']} >
               <Map onUpdateNameAdd={this.updateRestNameAddress}/>
             </Wrapper>

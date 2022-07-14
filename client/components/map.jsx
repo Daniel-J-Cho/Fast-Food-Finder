@@ -11,7 +11,8 @@ class Map extends React.Component {
       markers: [],
       address: '',
       restName: 'Select a restaurant',
-      spinner: false
+      spinner: false,
+      networkErrorMessage: ''
     };
     this.map = null;
     this.marker = null;
@@ -91,7 +92,10 @@ class Map extends React.Component {
       .then(result => {
         this.setState({ locationList: result.results, spinner: false }, this.placeMarkers);
       })
-      .catch(err => console.error('error:', err));
+      .catch(err => {
+        console.error('error:', err);
+        this.setState({ networkErrorMessage: 'Sorry, there was an error connecting to the network! Please check your internet connection and try again!' });
+      });
   }
 
   initSearchBox() {
@@ -111,8 +115,7 @@ class Map extends React.Component {
     if (!place[0].geometry) {
       this.setState({ address: 'Enter a place' });
     } else {
-      this.setState({ coords: { latitude: place[0].geometry.location.lat, longitude: place[0].geometry.location.lng } }, this.searchBoxMarker);
-      this.setState({ address: place[0].formatted_address });
+      this.setState({ coords: { latitude: place[0].geometry.location.lat, longitude: place[0].geometry.location.lng }, address: place[0].formatted_address }, this.searchBoxMarker);
     }
   }
 
@@ -205,7 +208,7 @@ class Map extends React.Component {
             </div>
           </div>
         </div>
-        <div className="row mb-md-4 mb-sm-2">
+        <div className="row dropdown-row mb-md-4 mb-sm-2">
           <div className="dropdown-menu-main col-2">
             <button className="btn btn-light dropdown-toggle" type="button" id="dropdownMenu1" data-bs-toggle="dropdown" aria-expanded="false">
               {this.state.restName}
@@ -239,6 +242,9 @@ class Map extends React.Component {
         </div>
         <div ref={this.mapDivRef} className="map-div" style={{ height: '73vh', width: '81vw', margin: 'auto' }} onClick={event => this.prepEntryBox(event)} />
         <Spinner spinner={this.state.spinner} />
+        <div className="network-error-message justify-content-center">
+          {this.state.networkErrorMessage}
+        </div>
       </div>
     );
   }
