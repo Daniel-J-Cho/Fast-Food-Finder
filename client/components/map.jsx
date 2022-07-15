@@ -52,9 +52,10 @@ class Map extends React.Component {
   }
 
   handleGeoClick() {
+    this.setState({ spinner: true });
     navigator.geolocation.getCurrentPosition(position => {
       if (position.coords) {
-        this.setState({ coords: position.coords });
+        this.setState({ coords: position.coords, spinner: false });
         this.map.setOptions({ center: { lat: position.coords.latitude, lng: position.coords.longitude } });
         this.marker = new window.google.maps.Marker();
         this.marker.setPosition({ lat: position.coords.latitude, lng: position.coords.longitude });
@@ -236,9 +237,9 @@ class Map extends React.Component {
               <li><a className="dropdown-item" href="#" onClick={event => this.handleDropdownClick(event)}>Wingstop</a></li>
             </ul>
           </div>
-          <div className="searchbox-div col d-flex justify-content-end">
+          <form className="searchbox-div col d-flex justify-content-end">
             <input ref={this.searchBoxRef} id="searchbox" className="searchbox" placeholder="Enter an address" type="text" />
-          </div>
+          </form>
         </div>
         <div ref={this.mapDivRef} className="map-div" style={{ height: '73vh', width: '81vw', margin: 'auto' }} onClick={event => this.prepEntryBox(event)} />
         <Spinner spinner={this.state.spinner} />

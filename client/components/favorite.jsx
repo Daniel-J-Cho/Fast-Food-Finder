@@ -138,9 +138,10 @@ class Favorite extends React.Component {
                 <div className="comments">
                   {this.state.comments.map((comment, index) => {
                     return (
-                    <div key={index}><input key={index} className="comment-input" onChange={event => this.handleCommentChange(event, index)} /><br></br><br></br>
-                    <button type="submit" onClick={() => this.addComment(index)} id="confirmButton" className="btn btn-primary confirm-button" data-bs-dismiss="modal">Confirm</button><br></br><br></br>
-                    </div>
+                    <form key={index}>
+                      <input key={index} className="comment-input" onChange={event => this.handleCommentChange(event, index)} /><br></br><br></br>
+                      <button type="submit" onClick={() => this.addComment(index)} id="confirmButton" className="btn btn-primary confirm-button" data-bs-dismiss="modal">Confirm</button><br></br><br></br>
+                    </form>
                     );
                   })}
                 </div>
@@ -164,10 +165,10 @@ class Favorite extends React.Component {
                 <div className="comments">
                   {this.state.displayComments.map((comment, index) => {
                     return (
-                      <div key={index}>
+                      <form key={index}>
                         <input value={this.state.displayComments[index].comment} key={index} className="comment-input" onChange={event => this.handleCommentEdit(event, index, this.state.displayComments[index].commentId)} /><br></br><br></br>
                         <button type="submit" onClick={() => this.editComment(index, this.state.displayComments[index].commentId)} id="confirmButton" className="btn btn-secondary confirm-button" data-bs-dismiss="modal">Confirm Edit</button><br></br><br></br>
-                      </div>
+                      </form>
                     );
                   })}
                 </div>
@@ -193,7 +194,7 @@ class Favorite extends React.Component {
                       <div key={index}>
                         <p className="card-text mb-1">•&nbsp;{this.state.displayComments[index].comment}</p>
                         <div className="col d-flex justify-content-end">
-                          <button type="submit" onClick={() => this.setCommentId(index, this.state.displayComments[index].commentId)} id="confirmDeleteButton" className="btn btn-warning confirm-delete-button" data-bs-dismiss="modal">Delete Comment</button><br></br><br></br>
+                          <button type="submit" onClick={() => this.setCommentId(index, this.state.displayComments[index].commentId)} id="confirmDeleteButton" className="btn btn-warning confirm-delete-button">Delete Comment</button><br></br><br></br>
                         </div>
                       </div>
                     );

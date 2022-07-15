@@ -33,7 +33,7 @@ body {
 }
 
 .address-div {
-  margin: 0 5px;
+  margin: 0 0.3125rem;
   font-weight: 450;
 }
 
@@ -47,26 +47,26 @@ body {
 }
 
 .card-header {
-  padding-left: 20px;
+  padding-left: 1.25rem;
   color: rgb(2, 99, 2);
 }
 
 .card-text {
-  padding: 10px 5px;
+  padding: 0.625rem 0.3125rem;
 }
 
 .comment-input {
   width: 90%;
-  margin-left: 10px;
+  margin-left: 0.625rem;
 }
 
 .confirm-button {
-  margin-left: 10px;
+  margin-left: 0.625rem;
 }
 
 .confirm-delete-button {
   height: 2.5rem;
-  margin-right: 20px;
+  margin-right: 1.25rem;
 }
 
 .map-div {
@@ -115,7 +115,7 @@ body {
 }
 
 .info-window-header {
-  margin-left: 5px;
+  margin-left: 0.3125rem;
 }
 
 .info-header-text {
@@ -124,7 +124,7 @@ body {
 }
 
 .rating-div {
-  margin: 0 5px;
+  margin: 0 0.3125rem;
   font-weight: 450;
 }
 
