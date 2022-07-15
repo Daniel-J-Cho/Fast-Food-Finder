@@ -219,11 +219,13 @@ class Favorite extends React.Component {
               );
             })}
             <div className="row mt-3">
-              <div className="col-options-row">
-                <button type="button" onClick={() => this.setAddCommentIdAddress(this.props.propKey, this.props.restAddress, this.props.restName)} className="btn btn-primary entry-btn" data-bs-toggle="modal" data-bs-target={`#addCommentModal-${this.props.propKey}`}>Add Comment</button>
-                <button type="button" onClick={() => this.setAddCommentIdAddress(this.props.propKey, this.props.restAddress, this.props.restName)} className="btn btn-secondary entry-btn" data-bs-toggle="modal" data-bs-target={`#editCommentModal-${this.props.propKey}`}>Edit Comment</button>
-                <button type="button" onClick={() => this.setAddCommentIdAddress(this.props.propKey, this.props.restAddress, this.props.restName)} className="btn btn-warning entry-btn" data-bs-toggle="modal" data-bs-target={`#deleteCommentModal-${this.props.propKey}`}>Delete Comment</button>
-                <button type="button" onClick={() => this.prepSetToDelete(this.props.propKey, this.props.restAddress, this.props.restName)} className="btn btn-danger entry-btn" data-bs-toggle="modal" data-bs-target="#deleteLocationModal">Delete Location</button>
+              <div className="col-sm-6 d-flex justify-content-around">
+                <button type="button" onClick={() => this.setAddCommentIdAddress(this.props.propKey, this.props.restAddress, this.props.restName)} className="btn btn-primary entry-btn mb-3" data-bs-toggle="modal" data-bs-target={`#addCommentModal-${this.props.propKey}`}>Add Comment</button>
+                <button type="button" onClick={() => this.setAddCommentIdAddress(this.props.propKey, this.props.restAddress, this.props.restName)} className="btn btn-secondary entry-btn mb-3" data-bs-toggle="modal" data-bs-target={`#editCommentModal-${this.props.propKey}`}>Edit Comment</button>
+              </div>
+              <div className="col-sm-6 d-flex justify-content-around">
+                <button type="button" onClick={() => this.setAddCommentIdAddress(this.props.propKey, this.props.restAddress, this.props.restName)} className="btn btn-warning entry-btn mb-3" data-bs-toggle="modal" data-bs-target={`#deleteCommentModal-${this.props.propKey}`}>Delete Comment</button>
+                <button type="button" onClick={() => this.prepSetToDelete(this.props.propKey, this.props.restAddress, this.props.restName)} className="btn btn-danger entry-btn mb-3" data-bs-toggle="modal" data-bs-target="#deleteLocationModal">Delete Location</button>
               </div>
             </div>
           </div>

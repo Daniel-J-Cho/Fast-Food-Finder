@@ -7,13 +7,6 @@
   font-size: 0.75rem;
 }
 
-.col-options-row {
-  display: flex;
-  max-width: 90%;
-  margin: auto;
-  justify-content: space-around;
-}
-
 .dropdown-menu-main {
   padding-left: 0;
 }
@@ -24,7 +17,7 @@
 }
 
 .entry-btn {
-  font-size: 12px;
+  font-size: 0.8rem;
   margin: 0 10px;
 }
 
