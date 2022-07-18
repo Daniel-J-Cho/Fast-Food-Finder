@@ -58,7 +58,7 @@ Try the application live at [https://fast-food-finder.herokuapp.com](https://fas
 1. Clone the repository.
 
   ```shell
-  git clone https://github.com/Daniel-J-Cho/Final-Project--Fast-Food-Finder.git
+  git clone https://github.com/Daniel-J-Cho/Fast-Food-Finder.git
   cd fast-food-finder
   ```
 
