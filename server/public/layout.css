@@ -25,15 +25,23 @@
   width: 25%;
 }
 
-.home-fav-row {
+.home-fav-row,
+.map-row,
+.main-header-row,
+.sign-in-register-row {
   max-width: 81vw;
   margin: auto;
 }
 
-.map-row {
+/* .map-row {
   max-width: 81vw;
   margin: auto;
-}
+} */
+
+/* .main-header-row {
+  max-width: 81vw;
+  margin: auto;
+} */
 
 .searchbox {
   margin-top: 0.75rem;
@@ -44,6 +52,11 @@
 .searchbox-div {
   padding-left: 0;
 }
+
+/* .sign-in-register-row {
+  max-width: 81vw;
+  margin: auto;
+} */
 
 @media screen and (min-width: 767px) {
   .container {

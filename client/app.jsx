@@ -1,5 +1,6 @@
 import React from 'react';
-import MainHeader from './pages/main-header';
+import FastFoodFinder from './components/fast-food-finder';
+import RegisterButton from './components/register-button';
 import HomeButton from './components/home-button';
 import FavoritesButton from './components/favorites-button';
 import LocationMarker from './components/location-marker';
@@ -7,6 +8,7 @@ import { parseRoute } from './lib';
 import { Wrapper } from '@googlemaps/react-wrapper';
 import Map from './components/map';
 import FavoritesView from './pages/favorites-view';
+import RegisterView from './pages/register-view';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -61,6 +63,16 @@ export default class App extends React.Component {
     if (route.path === '') {
       return (
         <div className="container">
+          <div className="row sign-in-register-row">
+            <div className="mt-3 d-flex justify-content-end ">
+              <RegisterButton />
+            </div>
+          </div>
+          <div className="row main-header-row">
+            <div className="main-header justify-content-center">
+              <FastFoodFinder />
+            </div>
+          </div>
           <div className="row home-fav-row">
             <div className="home-button d-flex align-items-center">
               <HomeButton />
@@ -83,12 +95,14 @@ export default class App extends React.Component {
     if (route.path === 'favorites') {
       return <FavoritesView />;
     }
+    if (route.path === 'register') {
+      return <RegisterView />;
+    }
   }
 
   render() {
     return (
     <>
-      <MainHeader />
       { this.renderPage() }
     </>
     );
