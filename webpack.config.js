@@ -54,6 +54,7 @@ module.exports = {
       'process.env': JSON.stringify(process.env)
     }),
     new webpack.EnvironmentPlugin(['GOOGLE_MAPS_API_KEY']),
+    new webpack.EnvironmentPlugin(['GOOGLE_MAPS_API_KEY_2']),
     isDevelopment && new ReactRefreshWebpackPlugin(),
     isDevelopment && new webpack.NoEmitOnErrorsPlugin(),
     isDevelopment && new webpack.HotModuleReplacementPlugin()
