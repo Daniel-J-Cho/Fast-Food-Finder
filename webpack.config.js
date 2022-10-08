@@ -53,7 +53,7 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env': JSON.stringify(process.env)
     }),
-    new webpack.EnvironmentPlugin([]),
+    new webpack.EnvironmentPlugin(['GOOGLE_MAPS_API_KEY']),
     isDevelopment && new ReactRefreshWebpackPlugin(),
     isDevelopment && new webpack.NoEmitOnErrorsPlugin(),
     isDevelopment && new webpack.HotModuleReplacementPlugin()
