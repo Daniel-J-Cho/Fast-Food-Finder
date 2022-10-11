@@ -2,6 +2,7 @@ import React from 'react';
 import HomeButton from '../components/home-button';
 import Favorite from '../components/favorite';
 import FastFoodFinder from '../components/fast-food-finder';
+import RegisterButton from '../components/register-button';
 
 class FavoritesView extends React.Component {
   constructor(props) {
@@ -58,6 +59,11 @@ class FavoritesView extends React.Component {
                 <button type="button" onClick={event => this.deleteEntry(event)} className="btn btn-danger" data-bs-dismiss="modal">Delete</button>
               </div>
             </div>
+          </div>
+        </div>
+        <div className="row sign-in-register-row">
+          <div className="mt-3 d-flex justify-content-end ">
+            <RegisterButton />
           </div>
         </div>
         <div className="row main-header-row">

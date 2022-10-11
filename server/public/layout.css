@@ -28,20 +28,18 @@
 .home-fav-row,
 .map-row,
 .main-header-row,
+.register-card-row,
 .sign-in-register-row {
   max-width: 81vw;
   margin: auto;
 }
 
-/* .map-row {
-  max-width: 81vw;
-  margin: auto;
-} */
-
-/* .main-header-row {
-  max-width: 81vw;
-  margin: auto;
-} */
+.register-username-input,
+.register-password-input {
+  width: 65vw;
+  margin-top: 1rem;
+  margin-left: 2rem;
+}
 
 .searchbox {
   margin-top: 0.75rem;
@@ -52,11 +50,6 @@
 .searchbox-div {
   padding-left: 0;
 }
-
-/* .sign-in-register-row {
-  max-width: 81vw;
-  margin: auto;
-} */
 
 @media screen and (min-width: 767px) {
   .container {
