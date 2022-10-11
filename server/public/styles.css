@@ -75,9 +75,25 @@ body {
   position: relative;
 }
 
+.reg-cancel-button {
+  color: blue;
+  border: 1px solid rgb(0, 0, 255);
+}
+
+.register-card-header {
+  background-color: #9bc4eb;
+  color: white;
+  font-weight: bold;
+}
+
 .searchbox {
   border-radius: 3px;
   border: none;
+}
+
+.sign-in-button {
+  background-color: #fda80d;
+  color: white;
 }
 
 .horizontal-line {
