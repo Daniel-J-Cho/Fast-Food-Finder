@@ -6,6 +6,8 @@ const errorMiddleware = require('./error-middleware');
 const fetch = require('node-fetch');
 const ClientError = require('./client-error');
 const argon2 = require('argon2');
+const jwt = require('jsonwebtoken');
+const authorizationMiddleware = require('./authorization-middleware');
 
 const db = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
@@ -53,6 +55,39 @@ app.post('/api/users/sign-up', (req, res, next) => {
     });
 });
 
+app.post('/api/users/sign-in', (req, res, next) => {
+  const { username, password } = req.body;
+  if (!username || !password) {
+    throw new ClientError(401, 'invalid login');
+  }
+  const sql = `
+    select "userId",
+           "hashedPassword"
+      from "users"
+     where "username" = $1
+  `;
+  const params = [username];
+  db.query(sql, params)
+    .then(result => {
+      const [user] = result.rows;
+      if (!user) {
+        throw new ClientError(401, 'invalid login');
+      }
+      const { userId, hashedPassword } = user;
+      return argon2
+        .verify(hashedPassword, password)
+        .then(isMatching => {
+          if (!isMatching) {
+            throw new ClientError(401, 'invalid login');
+          }
+          const payload = { userId, username };
+          const token = jwt.sign(payload, process.env.TOKEN_SECRET);
+          res.json({ token, user: payload });
+        });
+    })
+    .catch(err => next(err));
+});
+
 app.get('/api/locations', (req, res, next) => {
   const query = req.query.query;
   const location = req.query.location;
@@ -76,7 +111,10 @@ app.get('/api/restLocs', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.use(authorizationMiddleware);
+
 app.post('/api/restLocs', (req, res) => {
+  const { userId } = req.user;
   const { restName, restAddress, googlePlaceId } = req.body;
   if (!restName || !restAddress || !googlePlaceId) {
     res.status(400).json({
@@ -85,11 +123,11 @@ app.post('/api/restLocs', (req, res) => {
     return;
   }
   const sql = `
-    insert into "locations" ("restaurantName", "address", "googlePlaceId")
-    values ($1, $2, $3)
+    insert into "locations" ("userId", "restaurantName", "address", "googlePlaceId")
+    values ($1, $2, $3, $4)
     returning *
   `;
-  const params = [restName, restAddress, googlePlaceId];
+  const params = [userId, restName, restAddress, googlePlaceId];
   db.query(sql, params)
     .then(result => {
       const [locationData] = result.rows;

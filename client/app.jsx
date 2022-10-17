@@ -1,6 +1,7 @@
 import React from 'react';
 import FastFoodFinder from './components/fast-food-finder';
 import RegisterButton from './components/register-button';
+import SignInButton from './components/sign-in-button';
 import HomeButton from './components/home-button';
 import FavoritesButton from './components/favorites-button';
 import LocationMarker from './components/location-marker';
@@ -9,6 +10,7 @@ import { Wrapper } from '@googlemaps/react-wrapper';
 import Map from './components/map';
 import FavoritesView from './pages/favorites-view';
 import RegisterView from './pages/register-view';
+import SignInView from './pages/sign-in-view';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -17,7 +19,8 @@ export default class App extends React.Component {
       restName: '',
       restAddress: '',
       googlePlaceId: '',
-      route: parseRoute(window.location.hash)
+      route: parseRoute(window.location.hash),
+      userId: null
     };
     this.updateRestNameAddress = this.updateRestNameAddress.bind(this);
     this.renderEntry = this.renderEntry.bind(this);
@@ -64,7 +67,10 @@ export default class App extends React.Component {
       return (
         <div className="container">
           <div className="row sign-in-register-row">
-            <div className="mt-3 d-flex justify-content-end ">
+            <div className="mt-3 col-11 d-flex justify-content-end">
+              <SignInButton />
+            </div>
+            <div className="mt-3 col-1 d-flex justify-content-end ">
               <RegisterButton />
             </div>
           </div>
@@ -98,6 +104,10 @@ export default class App extends React.Component {
     if (route.path === 'register') {
       return <RegisterView />;
     }
+    if (route.path === 'sign-in') {
+      return <SignInView />;
+    }
+
   }
 
   render() {
