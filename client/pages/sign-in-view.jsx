@@ -2,40 +2,48 @@ import React from 'react';
 import HomeButton from '../components/home-button';
 import FavoritesButton from '../components/favorites-button';
 import FastFoodFinder from '../components/fast-food-finder';
-import SignInButton from '../components/sign-in-button';
+import RegisterButton from '../components/register-button';
 
-class RegisterView extends React.Component {
+class SignInView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      newUsername: '',
-      newPassword: ''
+      username: '',
+      password: '',
+      message: null,
+      userId: null
     };
-    this.register = this.register.bind(this);
-    this.handleNewUsernameInput = this.handleNewUsernameInput.bind(this);
-    this.handleNewPasswordInput = this.handleNewPasswordInput.bind(this);
+    this.handleUsernameInput = this.handleUsernameInput.bind(this);
+    this.handlePasswordInput = this.handlePasswordInput.bind(this);
+    this.signIn = this.signIn.bind(this);
   }
 
-  handleNewUsernameInput(event) {
-    this.setState({ newUsername: event.target.value });
+  handleUsernameInput(event) {
+    this.setState({ username: event.target.value });
   }
 
-  handleNewPasswordInput(event) {
-    this.setState({ newPassword: event.target.value });
+  handlePasswordInput(event) {
+    this.setState({ password: event.target.value });
   }
 
-  register() {
-    fetch('/api/users/sign-up', {
+  signIn() {
+    fetch('/api/users/sign-in', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        username: this.state.newUsername,
-        password: this.state.newPassword
+        username: this.state.username,
+        password: this.state.password
       })
     })
       .then(res => res.json())
+      .then(result => {
+        this.setState({ userId: result.user.userId });
+      })
+      .then(() => {
+        this.setState({ message: `Welcome ${this.state.username}` });
+      })
       .catch(err => console.error(err));
   }
 
@@ -44,7 +52,7 @@ class RegisterView extends React.Component {
       <div className="container">
         <div className="row sign-in-register-row">
           <div className="mt-3 d-flex justify-content-end ">
-            <SignInButton />
+            <RegisterButton />
           </div>
         </div>
         <div className="row main-header-row">
@@ -59,24 +67,27 @@ class RegisterView extends React.Component {
           <div className="col-1 favorites-button d-flex align-items-center">
             <FavoritesButton />
           </div>
+          <div className="col welcome-message d-flex justify-content-end">
+            {this.state.message}
+          </div>
         </div>
         <div className="row register-card-row mt-4 ">
           <div className="card register-card">
             <div className="card-header register-card-header">
-              Register
+              Sign-In
             </div>
             <div className="card-body">
               <form>
-                <h5 className="card-title mt-5 px-4">Create your Username</h5>
-                <input className="register-username-input" type="text" placeholder="Enter your username" onChange={event => this.handleNewUsernameInput(event)} />
-                <h5 className="card-title mt-3 px-4">Create your Password</h5>
-                <input className="register-password-input" type="password" placeholder="Create your password" onChange={event => this.handleNewPasswordInput(event) } />
+                <h5 className="card-title mt-5 px-4">Enter your Username</h5>
+                <input className="register-username-input" type="text" placeholder="Enter your username" onChange={event => this.handleUsernameInput(event)} />
+                <h5 className="card-title mt-3 px-4">Enter your Password</h5>
+                <input className="register-password-input" type="password" placeholder="Enter your password" onChange={event => this.handlePasswordInput(event)} />
                 <div className="row register-buttons-row mt-5 mb-3">
                   <div className="col-6 reg-cancel-button-col d-flex justify-content-center">
                     <a href="#" className="btn btn-light reg-cancel-button">Cancel</a>
                   </div>
                   <div className="col-6 reg-submit-button-col d-flex justify-content-center">
-                    <a href="#" className="btn btn-primary reg-submit-button" id="register" onClick={() => this.register()} >Sign Up</a>
+                    <a href="#" className="btn btn-primary reg-submit-button" id="sign-in" onClick={() => this.signIn()} >Sign In</a>
                   </div>
                 </div>
               </form>
@@ -88,4 +99,4 @@ class RegisterView extends React.Component {
   }
 }
 
-export default RegisterView;
+export default SignInView;
