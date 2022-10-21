@@ -1,7 +1,8 @@
 import React from 'react';
+import jwtDecode from 'jwt-decode';
+import AppContext from './lib/app-context';
+import Auth from './pages/auth';
 import FastFoodFinder from './components/fast-food-finder';
-import RegisterButton from './components/register-button';
-import SignInButton from './components/sign-in-button';
 import HomeButton from './components/home-button';
 import FavoritesButton from './components/favorites-button';
 import LocationMarker from './components/location-marker';
@@ -9,8 +10,7 @@ import { parseRoute } from './lib';
 import { Wrapper } from '@googlemaps/react-wrapper';
 import Map from './components/map';
 import FavoritesView from './pages/favorites-view';
-import RegisterView from './pages/register-view';
-import SignInView from './pages/sign-in-view';
+import Navbar from './components/navbar';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -20,16 +20,33 @@ export default class App extends React.Component {
       restAddress: '',
       googlePlaceId: '',
       route: parseRoute(window.location.hash),
-      userId: null
+      user: null,
+      isAuthorizing: true
     };
     this.updateRestNameAddress = this.updateRestNameAddress.bind(this);
     this.renderEntry = this.renderEntry.bind(this);
+    this.handleSignIn = this.handleSignIn.bind(this);
+    this.handleSignOut = this.handleSignOut.bind(this);
   }
 
   componentDidMount() {
     window.addEventListener('hashchange', () => {
       this.setState({ route: parseRoute(window.location.hash) });
     });
+    const token = window.localStorage.getItem('fast-food-finder-jwt');
+    const user = token ? jwtDecode(token) : null;
+    this.setState({ user, isAuthorizing: false });
+  }
+
+  handleSignIn(result) {
+    const { user, token } = result;
+    window.localStorage.setItem('fast-food-finder-jwt', token);
+    this.setState({ user });
+  }
+
+  handleSignOut() {
+    window.localStorage.removeItem('fast-food-finder-jwt');
+    this.setState({ user: null });
   }
 
   updateRestNameAddress(event) {
@@ -67,11 +84,8 @@ export default class App extends React.Component {
       return (
         <div className="container">
           <div className="row sign-in-register-row">
-            <div className="mt-3 col-11 d-flex justify-content-end">
-              <SignInButton />
-            </div>
-            <div className="mt-3 col-1 d-flex justify-content-end ">
-              <RegisterButton />
+            <div className="col navbar-col d-flex justify-content-end">
+              <Navbar />
             </div>
           </div>
           <div className="row main-header-row">
@@ -101,20 +115,24 @@ export default class App extends React.Component {
     if (route.path === 'favorites') {
       return <FavoritesView />;
     }
-    if (route.path === 'register') {
-      return <RegisterView />;
+    if (route.path === 'register' || route.path === 'sign-in') {
+      return <Auth />;
     }
-    if (route.path === 'sign-in') {
-      return <SignInView />;
-    }
-
   }
 
   render() {
+    if (this.state.isAuthorizing) {
+      return null;
+    }
+    const { user, route } = this.state;
+    const { handleSignIn, handleSignOut } = this;
+    const contextValue = { user, route, handleSignIn, handleSignOut };
     return (
-    <>
-      { this.renderPage() }
-    </>
+      <AppContext.Provider value={contextValue}>
+        <>
+          {this.renderPage()}
+        </>
+      </AppContext.Provider>
     );
   }
 }
