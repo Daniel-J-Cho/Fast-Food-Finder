@@ -144,6 +144,11 @@ body {
   font-weight: 450;
 }
 
+.sign-out-button {
+  background-color: #76869c;
+  color: white;
+}
+
 .spinner-border {
   position: absolute;
   top: 55%;
@@ -156,4 +161,8 @@ body {
   left: 17%;
   color: rgb(8, 16, 90);
   font-size: 1.5rem;
+}
+
+.welcome-message {
+  color: rgb(0, 0, 255);
 }

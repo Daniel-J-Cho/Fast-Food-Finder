@@ -2,7 +2,7 @@ import React from 'react';
 import HomeButton from '../components/home-button';
 import Favorite from '../components/favorite';
 import FastFoodFinder from '../components/fast-food-finder';
-import RegisterButton from '../components/register-button';
+import Navbar from '../components/navbar';
 
 class FavoritesView extends React.Component {
   constructor(props) {
@@ -18,7 +18,11 @@ class FavoritesView extends React.Component {
   }
 
   componentDidMount() {
-    fetch('/api/restLocs')
+    fetch('/api/restLocs', {
+      headers: {
+        'X-Access-Token': window.localStorage.getItem('fast-food-finder-jwt')
+      }
+    })
       .then(res => res.json())
       .then(data => this.setState({ entries: data }))
       .catch(err => console.error('error:', err));
@@ -30,11 +34,14 @@ class FavoritesView extends React.Component {
 
   deleteEntry(event) {
     fetch(`/api/favorites/${this.state.toDeleteId}`, {
-      method: 'DELETE'
+      method: 'DELETE',
+      headers: {
+        'X-Access-Token': window.localStorage.getItem('fast-food-finder-jwt')
+      }
     })
       .then(() => {
         const filteredEntries = this.state.entries.filter(entry => {
-          return entry.locationId !== this.state.toDeleteId;
+          return entry.entryId !== this.state.toDeleteId;
         });
         this.setState({ entries: filteredEntries, toDeleteId: null });
       })
@@ -63,7 +70,7 @@ class FavoritesView extends React.Component {
         </div>
         <div className="row sign-in-register-row">
           <div className="mt-3 d-flex justify-content-end ">
-            <RegisterButton />
+            <Navbar />
           </div>
         </div>
         <div className="row main-header-row">
@@ -80,7 +87,7 @@ class FavoritesView extends React.Component {
           {this.state.entries.map(entry => {
             return (
               <Favorite
-                key={entry.locationId} propKey={entry.locationId} restName={entry.restaurantName} restAddress={entry.address}
+                key={entry.entryId} propKey={entry.entryId} restName={entry.restaurantName} restAddress={entry.address}
                 deleteThisBit={this.setToDelete}
               />
             );

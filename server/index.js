@@ -98,19 +98,6 @@ app.get('/api/locations', (req, res, next) => {
     .catch(err => next(err));
 });
 
-app.get('/api/restLocs', (req, res, next) => {
-  const sql = `
-    select *
-      from "locations"
-     order by "locationId"
-  `;
-  db.query(sql)
-    .then(result => {
-      res.json(result.rows);
-    })
-    .catch(err => next(err));
-});
-
 app.use(authorizationMiddleware);
 
 app.post('/api/restLocs', (req, res) => {
@@ -141,24 +128,40 @@ app.post('/api/restLocs', (req, res) => {
     });
 });
 
-app.delete('/api/favorites/:locationId', (req, res, next) => {
-  const locationId = Number(req.params.locationId);
-  if (!Number.isInteger(locationId) || locationId <= 0) {
+app.get('/api/restLocs', (req, res, next) => {
+  const { userId } = req.user;
+  const sql = `
+    select *
+      from "locations"
+      where "userId" = $1
+     order by "entryId"
+  `;
+  const params = [userId];
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows);
+    })
+    .catch(err => next(err));
+});
+
+app.delete('/api/favorites/:entryId', (req, res, next) => {
+  const entryId = Number(req.params.entryId);
+  if (!Number.isInteger(entryId) || entryId <= 0) {
     res.status(400).json({
-      error: '\'locationId\' must be a positive integer'
+      error: '\'entryId\' must be a positive integer'
     });
     return;
   }
 
-  const text = 'DELETE FROM locations WHERE "locationId"=$1 RETURNING *';
-  const params = [locationId];
+  const text = 'DELETE FROM locations WHERE "entryId"=$1 RETURNING *';
+  const params = [entryId];
 
   db.query(text, params)
     .then(result => {
       const locId = result.rows[0];
       if (!locId) {
         res.status(404).json({
-          error: `Cannot find 'locationId' ${locationId}`
+          error: `Cannot find 'entryId' ${entryId}`
         });
       } else {
         res.status(204).json();
@@ -170,22 +173,22 @@ app.delete('/api/favorites/:locationId', (req, res, next) => {
     });
 });
 
-app.post('/api/comments/:locationId', (req, res, next) => {
-  const locationId = Number(req.params.locationId);
+app.post('/api/comments/:entryId', (req, res, next) => {
+  const entryId = Number(req.params.entryId);
   const comment = req.body.comment;
-  if (!Number.isInteger(locationId) || locationId <= 0) {
+  if (!Number.isInteger(entryId) || entryId <= 0) {
     res.status(400).json({
-      error: '\'locationId\' must be a positive integer'
+      error: '\'entryId\' must be a positive integer'
     });
     return;
   }
 
   const sql = `
-    insert into "comments" ("comment", "locationId", "createdAt")
+    insert into "comments" ("comment", "entryId", "createdAt")
     values ($1, $2, now())
     returning *
   `;
-  const params = [comment, locationId];
+  const params = [comment, entryId];
   db.query(sql, params)
     .then(result => {
       const commentData = result.rows[0];
@@ -197,21 +200,21 @@ app.post('/api/comments/:locationId', (req, res, next) => {
     });
 });
 
-app.get('/api/comments/:locationId', (req, res, next) => {
-  const locationId = Number(req.params.locationId);
-  if (!Number.isInteger(locationId) || locationId <= 0) {
+app.get('/api/comments/:entryId', (req, res, next) => {
+  const entryId = Number(req.params.entryId);
+  if (!Number.isInteger(entryId) || entryId <= 0) {
     res.status(400).json({
-      error: '\'locationId\' must be a positive integer'
+      error: '\'entryId\' must be a positive integer'
     });
     return;
   }
   const sql = `
     select *
       from comments
-    where "locationId" = ($1)
+    where "entryId" = ($1)
     order by "commentId"
   `;
-  const params = [locationId];
+  const params = [entryId];
 
   db.query(sql, params)
     .then(result => {
@@ -252,21 +255,21 @@ app.put('/api/comments/:commentId', (req, res, next) => {
     });
 });
 
-app.get('/api/comments/:locationId', (req, res, next) => {
-  const locationId = Number(req.params.locationId);
-  if (!Number.isInteger(locationId) || locationId <= 0) {
+app.get('/api/comments/:entryId', (req, res, next) => {
+  const entryId = Number(req.params.entryId);
+  if (!Number.isInteger(entryId) || entryId <= 0) {
     res.status(400).json({
-      error: '\'locationId\' must be a positive integer'
+      error: '\'entryId\' must be a positive integer'
     });
     return;
   }
   const sql = `
     select *
       from comments
-     where "locationId" = ($1)
+     where "entryId" = ($1)
     order by "commentId"
   `;
-  const params = [locationId];
+  const params = [entryId];
 
   db.query(sql, params)
     .then(result => {
@@ -303,23 +306,23 @@ app.delete('/api/comments/:commentId', (req, res, next) => {
     });
 });
 
-app.delete('/api/comments/:locationId', (req, res, next) => {
-  const locationId = Number(req.params.locationId);
-  if (!Number.isInteger(locationId) || locationId <= 0) {
+app.delete('/api/comments/:entryId', (req, res, next) => {
+  const entryId = Number(req.params.entryId);
+  if (!Number.isInteger(entryId) || entryId <= 0) {
     res.status(400).json({
-      error: '\'locationId\' must be a positive integer'
+      error: '\'entryId\' must be a positive integer'
     });
     return;
   }
-  const text = 'DELETE FROM comments WHERE "locationId"=$1 RETURNING *';
-  const params = [locationId];
+  const text = 'DELETE FROM comments WHERE "entryId"=$1 RETURNING *';
+  const params = [entryId];
 
   db.query(text, params)
     .then(result => {
       const locId = result.rows;
       if (!locId) {
         res.status(404).json({
-          error: `Cannot find 'locationId' ${locationId}`
+          error: `Cannot find 'entryId' ${entryId}`
         });
       } else {
         res.status(204).json();

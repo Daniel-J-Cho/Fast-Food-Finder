@@ -39,7 +39,7 @@ class AuthPage extends React.Component {
           <div className="col-1 favorites-button d-flex align-items-center">
             <FavoritesButton />
           </div>
-          <div className="card">
+          <div className="col-12">
             <AuthForm
               key={route.path}
               action={route.path}

@@ -18,31 +18,31 @@ create schema "public";
 
 
  CREATE TABLE "public"."locations" (
-	"locationId" 				serial 						NOT NULL,
+	"entryId" 				serial 						NOT NULL,
 	"restaurantName" 		TEXT 							NOT NULL,
 	"address" 					TEXT 							NOT NULL,
   "googlePlaceId" 		TEXT 							NOT NULL,
 	"userId" 						INTEGER 					NOT NULL,
-	CONSTRAINT "locations_pk" PRIMARY KEY ("locationId")
+	CONSTRAINT "locations_pk" PRIMARY KEY ("entryId")
 ) WITH (
   OIDS=FALSE
 );
 
 
-CREATE TABLE "public"."favEntries" (
-	"entryId"						serial						NOT NULL,
-	"locationId"				INTEGER						NOT NULL,
-	"createdAt"					timestamptz				NOT NULL,
-	CONSTRAINT "favEntries_pk" PRIMARY KEY ("entryId")
-) WITH (
-	OIDS=FALSE
-);
+-- CREATE TABLE "public"."favEntries" (
+-- 	"entryId"						serial						NOT NULL,
+-- 	"locationId"				INTEGER						NOT NULL,
+-- 	"createdAt"					timestamptz				NOT NULL,
+-- 	CONSTRAINT "favEntries_pk" PRIMARY KEY ("entryId")
+-- ) WITH (
+-- 	OIDS=FALSE
+-- );
 
 
 CREATE TABLE "public"."comments" (
 	"commentId" 				serial 						NOT NULL,
 	"comment" 					TEXT 							NOT NULL,
-	"entryId" 					integer 					NOT NULL,
+	"entryId" 				  INTEGER 					NOT NULL,
 	"createdAt" 				timestamptz 			NOT NULL,
 	CONSTRAINT "comments_pk" PRIMARY KEY ("commentId")
 ) WITH (
@@ -52,6 +52,6 @@ CREATE TABLE "public"."comments" (
 
 ALTER TABLE "locations" ADD CONSTRAINT "locations_fk0" FOREIGN KEY ("userId") REFERENCES "users"("userId");
 
-ALTER TABLE "favEntries" ADD CONSTRAINT "favEntries_fk0" FOREIGN KEY ("locationId") REFERENCES "locations"("locationId");
+-- ALTER TABLE "favEntries" ADD CONSTRAINT "favEntries_fk0" FOREIGN KEY ("locationId") REFERENCES "locations"("locationId");
 
-ALTER TABLE "comments" ADD CONSTRAINT "comments_fk0" FOREIGN KEY ("entryId") REFERENCES "favEntries"("entryId") ON DELETE CASCADE;
+ALTER TABLE "comments" ADD CONSTRAINT "comments_fk0" FOREIGN KEY ("entryId") REFERENCES "locations"("entryId") ON DELETE CASCADE;
