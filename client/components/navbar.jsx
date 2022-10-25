@@ -10,19 +10,9 @@ class Navbar extends React.Component {
         <div className="container">
           <div>
             { user !== null &&
-              <button className="btn btn-dark" onClick={handleSignOut}>
+              <button className="btn sign-out-button" onClick={handleSignOut}>
                 Sign out
               </button>
-            }
-            { user === null &&
-              <>
-              <a href="#sign-in" className="btn sign-in-button ml-3">
-                Sign In
-              </a>
-              <a href="#register" className="btn btn-primary">
-                Register
-              </a>
-              </>
             }
           </div>
         </div>

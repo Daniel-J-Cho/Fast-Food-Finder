@@ -2,15 +2,9 @@ import React from 'react';
 import jwtDecode from 'jwt-decode';
 import AppContext from './lib/app-context';
 import Auth from './pages/auth';
-import FastFoodFinder from './components/fast-food-finder';
-import HomeButton from './components/home-button';
-import FavoritesButton from './components/favorites-button';
-import LocationMarker from './components/location-marker';
 import { parseRoute } from './lib';
-import { Wrapper } from '@googlemaps/react-wrapper';
-import Map from './components/map';
 import FavoritesView from './pages/favorites-view';
-import Navbar from './components/navbar';
+import Home from './pages/home';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -46,7 +40,7 @@ export default class App extends React.Component {
 
   handleSignOut() {
     window.localStorage.removeItem('fast-food-finder-jwt');
-    this.setState({ user: null });
+    this.setState({ user: null, route: parseRoute('#') });
   }
 
   updateRestNameAddress(event) {
@@ -61,6 +55,7 @@ export default class App extends React.Component {
     fetch('/api/restLocs', {
       method: 'POST',
       headers: {
+        'X-Access-Token': window.localStorage.getItem('fast-food-finder-jwt'),
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
@@ -74,43 +69,11 @@ export default class App extends React.Component {
   }
 
   renderPage() {
+
     const { route } = this.state;
 
-    const render = Status => {
-      return <h1>{Status}</h1>;
-    };
-
     if (route.path === '') {
-      return (
-        <div className="container">
-          <div className="row sign-in-register-row">
-            <div className="col navbar-col d-flex justify-content-end">
-              <Navbar />
-            </div>
-          </div>
-          <div className="row main-header-row">
-            <div className="main-header justify-content-center">
-              <FastFoodFinder />
-            </div>
-          </div>
-          <div className="row home-fav-row">
-            <div className="home-button d-flex align-items-center">
-              <HomeButton />
-            </div>
-            <div className="col-1 favorites-button d-flex align-items-center">
-              <FavoritesButton />
-            </div>
-            <div className="col d-flex justify-content-end">
-              <LocationMarker />
-            </div>
-          </div>
-          <div className="row map-row mt-lg-3">
-            <Wrapper apiKey={process.env.GOOGLE_MAPS_API_KEY} render={render} libraries={['places']} >
-              <Map onUpdateNameAdd={this.updateRestNameAddress}/>
-            </Wrapper>
-          </div>
-        </div>
-      );
+      return <Home />;
     }
     if (route.path === 'favorites') {
       return <FavoritesView />;
@@ -125,8 +88,8 @@ export default class App extends React.Component {
       return null;
     }
     const { user, route } = this.state;
-    const { handleSignIn, handleSignOut } = this;
-    const contextValue = { user, route, handleSignIn, handleSignOut };
+    const { handleSignIn, handleSignOut, updateRestNameAddress } = this;
+    const contextValue = { user, route, handleSignIn, handleSignOut, updateRestNameAddress };
     return (
       <AppContext.Provider value={contextValue}>
         <>

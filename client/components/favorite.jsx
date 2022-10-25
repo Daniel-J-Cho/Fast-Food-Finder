@@ -26,7 +26,11 @@ class Favorite extends React.Component {
   }
 
   componentDidMount() {
-    fetch(`/api/comments/${this.props.propKey}`)
+    fetch(`/api/comments/${this.props.propKey}`, {
+      headers: {
+        'X-Access-Token': window.localStorage.getItem('fast-food-finder-jwt')
+      }
+    })
       .then(res => res.ok ? res.json() : Promise.reject(new Error('Something went wrong')))
       .then(data => this.setState({ displayComments: data }))
       .catch(err => console.error('error:', err));
@@ -62,6 +66,7 @@ class Favorite extends React.Component {
     fetch(`/api/comments/${this.state.addCommentId}`, {
       method: 'POST',
       headers: {
+        'X-Access-Token': window.localStorage.getItem('fast-food-finder-jwt'),
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
@@ -79,6 +84,7 @@ class Favorite extends React.Component {
     fetch(`/api/comments/${this.state.commentId}`, {
       method: 'PUT',
       headers: {
+        'X-Access-Token': window.localStorage.getItem('fast-food-finder-jwt'),
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
@@ -98,7 +104,11 @@ class Favorite extends React.Component {
 
   deleteComment(index) {
     fetch(`/api/comments/${this.state.commentId}`, {
-      method: 'DELETE'
+      method: 'DELETE',
+      headers: {
+        'X-Access-Token': window.localStorage.getItem('fast-food-finder-jwt'),
+        'Content-Type': 'application/json'
+      }
     })
       .then(() => {
         const filteredComments = this.state.displayComments.filter(comment => {
@@ -110,14 +120,26 @@ class Favorite extends React.Component {
   }
 
   displayComments() {
-    fetch(`/api/comments/${this.state.addCommentId}`)
+    fetch(`/api/comments/${this.state.addCommentId}`, {
+      method: 'GET',
+      headers: {
+        'X-Access-Token': window.localStorage.getItem('fast-food-finder-jwt'),
+        'Content-Type': 'application/json'
+      }
+    })
       .then(res => res.json())
       .then(data => this.setState({ displayComments: data }))
       .catch(err => console.error('error:', err));
   }
 
   displayEditedComments() {
-    fetch(`/api/comments/${this.state.editCommentId}`)
+    fetch(`/api/comments/${this.state.editCommentId}`, {
+      method: 'GET',
+      headers: {
+        'X-Access-Token': window.localStorage.getItem('fast-food-finder-jwt'),
+        'Content-Type': 'application/json'
+      }
+    })
       .then(res => res.json())
       .then(data => this.setState({ displayComments: data }))
       .catch(err => console.error('error:', err));
