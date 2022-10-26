@@ -69,38 +69,17 @@ body {
   margin-right: 1.25rem;
 }
 
-.map-div {
-  border: 2px solid rgb(0, 253, 42);
-  border-radius: 10px;
-  position: relative;
-}
-
-.reg-cancel-button {
-  color: blue;
-  border: 1px solid rgb(0, 0, 255);
-}
-
-.register-card-header {
-  background-color: #9bc4eb;
-  color: white;
-  font-weight: bold;
-}
-
-.searchbox {
-  border-radius: 3px;
-  border: none;
-}
-
-.sign-in-button {
-  background-color: #fda80d;
-  color: white;
-}
-
 .horizontal-line {
   color: rgb(255, 0, 0);
   height: 3px;
   background-color: rgb(0, 34, 255);
   border: 0 none;
+}
+
+.map-div {
+  border: 2px solid rgb(0, 253, 42);
+  border-radius: 10px;
+  position: relative;
 }
 
 .main-header {
@@ -124,6 +103,10 @@ body {
   width: 70px;
 }
 
+.invalid-sign-in-message-row {
+  color: rgb(0, 0, 255);
+}
+
 .fa-solid.fa-location-dot {
   font-size: 2.3rem;
   color: rgb(255, 166, 0);
@@ -144,8 +127,44 @@ body {
   font-weight: 450;
 }
 
+.reg-cancel-button {
+  color: blue;
+  border: 1px solid rgb(0, 0, 255);
+}
+
+.reg-cancel-button:hover {
+  color: rgb(255, 0, 0);
+  border: 1px solid rgb(255, 0, 0);
+}
+
+.register-card-header {
+  background-color: #9bc4eb;
+  color: white;
+  font-weight: bold;
+}
+
+.searchbox {
+  border-radius: 3px;
+  border: none;
+}
+
+.sign-in-button {
+  background-color: #fda80d;
+  color: white;
+}
+
+.sign-in-button:hover {
+  background-color: #fda80d;
+  color: white;
+}
+
 .sign-out-button {
   background-color: #76869c;
+  color: white;
+}
+
+.sign-out-button:hover {
+  background-color: #4a5565;
   color: white;
 }
 
@@ -165,4 +184,5 @@ body {
 
 .welcome-message {
   color: rgb(0, 0, 255);
+}
 }

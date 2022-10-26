@@ -4,24 +4,17 @@ class AuthForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: '',
-      password: ''
+      username: 'Guest',
+      password: 'eeeyybattabatta',
+      message: ''
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleGuest = this.handleGuest.bind(this);
   }
 
   handleChange(event) {
     const { name, value } = event.target;
     this.setState({ [name]: value });
-  }
-
-  handleGuest(event) {
-    this.setState({
-      username: 'Guest',
-      password: 'eeeyybattabatta'
-    }, this.handleSubmit(event));
   }
 
   handleSubmit(event) {
@@ -42,13 +35,17 @@ class AuthForm extends React.Component {
           window.location.hash = 'sign-in';
         } else if (result.user && result.token) {
           this.props.onSignIn(result);
+        } else if (!result.user || result.token) {
+          this.setState({
+            message: 'Invalid username or password. Please try again or register.'
+          });
         }
       });
   }
 
   render() {
     const { action } = this.props;
-    const { handleChange, handleSubmit, handleGuest } = this;
+    const { handleChange, handleSubmit } = this;
     const headerMessage = action === 'register'
       ? 'Register'
       : 'Sign In';
@@ -69,6 +66,9 @@ class AuthForm extends React.Component {
       : 'Don\'t have an account yet? Register!';
     return (
       <>
+        <div className="row invalid-sign-in-message-row d-flex justify-content-center">
+          {this.state.message}
+        </div>
         <div className="card mt-3">
           <div className="card-header register-card-header">
             {headerMessage}
@@ -108,13 +108,11 @@ class AuthForm extends React.Component {
         <div className="card mt-3">
           <div className="card-body">
             <div className="row alt-links-row">
-              <div className="col-6 d-flex justify-content-center align-items-center">
+              <div className="col-6 d-flex justify-content-center align-items-center alt-link">
                 <a href={alternateActionHref} className="alt-link">{alternateActionText}</a>
               </div>
-              <div className="col-6 d-flex justify-content-center align-items-center">
-                <form onSubmit={handleSubmit}>
-                  <a href='#' className="sign-in-guest" onClick={handleGuest}>Sign In as &apos;Guest&apos;</a>
-                </form>
+              <div className="col-6 d-flex justify-content-center align-items-center sign-in-guest-link">
+                <a href='#' className="sign-in-guest" id="guest" onClick={handleSubmit}>Sign In as &apos;Guest&apos;</a>
               </div>
             </div>
           </div>
