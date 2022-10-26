@@ -34,6 +34,13 @@
   margin: auto;
 }
 
+.alt-link,
+.invalid-sign-in-message-row,
+.sign-in-guest,
+.welcome-message {
+  font-size: 0.8rem;
+}
+
 .register-username-input,
 .register-password-input {
   width: 65vw;
@@ -58,6 +65,13 @@
 
   .favorites-button {
     width: 20%;
+  }
+
+  .alt-link,
+  .invalid-sign-in-message-row,
+  .sign-in-guest,
+  .welcome-message {
+    font-size: 1rem;
   }
 
   .searchbox {

@@ -47,7 +47,7 @@ class Home extends React.Component {
           <div className="col d-flex justify-content-end align-items-center welcome-message">
             {welcomeMessage}
           </div>
-          <div className="col d-flex justify-content-end">
+          <div className="col-lg-1 col-2 d-flex justify-content-end">
             <LocationMarker />
           </div>
         </div>
