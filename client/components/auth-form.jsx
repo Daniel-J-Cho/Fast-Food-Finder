@@ -83,7 +83,8 @@ class AuthForm extends React.Component {
                 name="username"
                 onChange={handleChange}
                 className="form-control bg-light"
-                placeholder={placeholderUsernameText} />
+                placeholder={placeholderUsernameText}
+                value={this.state.username} />
               <h5 className="card-title mt-3 px-4">{placeholderPasswordText}</h5>
               <input
                 required
@@ -92,7 +93,8 @@ class AuthForm extends React.Component {
                 name="password"
                 onChange={handleChange}
                 className="form-control bg-light"
-                placeholder={placeholderPasswordText} />
+                placeholder={placeholderPasswordText}
+                value={this.state.password} />
               <div className="row register-buttons-row mt-5 mb-3">
                 <div className="col-6 reg-cancel-button-col d-flex justify-content-center">
                   <a href="#" className="btn btn-light reg-cancel-button">Clear Fields</a>
