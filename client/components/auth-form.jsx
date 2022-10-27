@@ -35,7 +35,7 @@ class AuthForm extends React.Component {
           window.location.hash = 'sign-in';
         } else if (result.user && result.token) {
           this.props.onSignIn(result);
-        } else if (!result.user || result.token) {
+        } else if (!result.user || !result.token) {
           this.setState({
             message: 'Invalid username or password. Please try again or register.'
           });
@@ -112,7 +112,7 @@ class AuthForm extends React.Component {
                 <a href={alternateActionHref} className="alt-link">{alternateActionText}</a>
               </div>
               <div className="col-6 d-flex justify-content-center align-items-center sign-in-guest-link">
-                <a href='#' className="sign-in-guest" id="guest" onClick={handleSubmit}>Sign In as &apos;Guest&apos;</a>
+                <a href='#' className="btn btn-primary sign-in-guest" id="guest" onClick={handleSubmit}>Sign In as &apos;Guest&apos;</a>
               </div>
             </div>
           </div>
