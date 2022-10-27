@@ -23,7 +23,6 @@ class AuthForm extends React.Component {
     const req = {
       method: 'POST',
       headers: {
-        'X-Access-Token': window.localStorage.getItem('fast-food-finder-jwt'),
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(this.state)
