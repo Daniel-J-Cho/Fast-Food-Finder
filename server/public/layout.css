@@ -29,6 +29,7 @@
 .map-row,
 .main-header-row,
 .register-card-row,
+.sign-in-register-card-row,
 .sign-in-register-row {
   max-width: 81vw;
   margin: auto;

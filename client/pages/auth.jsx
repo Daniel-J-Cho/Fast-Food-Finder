@@ -3,8 +3,6 @@ import Redirect from '../components/redirect';
 import AuthForm from '../components/auth-form';
 import AppContext from '../lib/app-context';
 import FastFoodFinder from '../components/fast-food-finder';
-import HomeButton from '../components/home-button';
-import FavoritesButton from '../components/favorites-button';
 import SignInButton from '../components/sign-in-button';
 import RegisterButton from '../components/register-button';
 
@@ -32,13 +30,7 @@ class AuthPage extends React.Component {
             <FastFoodFinder />
           </div>
         </div>
-        <div className="row home-fav-row">
-          <div className="home-button d-flex align-items-center">
-            <HomeButton />
-          </div>
-          <div className="col-1 favorites-button d-flex align-items-center">
-            <FavoritesButton />
-          </div>
+        <div className="row sign-in-register-card-row">
           <div className="col-12">
             <AuthForm
               key={route.path}
