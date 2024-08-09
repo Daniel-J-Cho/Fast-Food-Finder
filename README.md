@@ -9,7 +9,7 @@ library.
 
 ## Live Demo
 
-Try the application live at [https://fast-food-finder.herokuapp.com](https://fast-food-finder.herokuapp.com)
+Try the application live at https://fast-food-finder.danielcho.dev/#sign-in
 
 ## Technologies Used
 
