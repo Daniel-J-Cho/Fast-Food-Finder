@@ -9,7 +9,7 @@ library.
 
 ## Live Demo
 
-Try the application live at https://fast-food-finder.danielcho.dev/#sign-in
+Try the application live at https://fast-food-finder.danielcho.dev/
 
 ## Technologies Used
 
